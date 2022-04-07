@@ -23,13 +23,9 @@ python3 computer_vision_analysis.py transfer_learning model1 3
 # python3 computer_vision_analysis.py localization_detection model3
 
 
-# python3 computer_vision_analysis.py segmentation 2 model1
-# python3 computer_vision_analysis.py segmentation 2 model2
-# python3 computer_vision_analysis.py segmentation 2 model3
-
-# python3 computer_vision_analysis.py segmentation 4 model1
-# python3 computer_vision_analysis.py segmentation 4 model2
-# python3 computer_vision_analysis.py segmentation 4 model3
+# python3 computer_vision_analysis.py segmentation model1
+# python3 computer_vision_analysis.py segmentation model2
+# python3 computer_vision_analysis.py segmentation model3
 
 
 # python3 computer_vision_analysis.py continuous_learning model1 deep_q_learning

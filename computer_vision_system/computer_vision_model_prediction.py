@@ -5,10 +5,8 @@ class prediction_with_model(object):
 
         self.image_path = image_path
         self.model = model
-
         img = cv2.imread(self.image_path)
         img = cv2.resize(img, (224, 224))
-        
         index = self.predict_image(img)
 
 

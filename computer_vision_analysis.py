@@ -19,104 +19,59 @@ if __name__ == "__main__":
 
         if sys.argv[1] == "image_prediction":
              
-            if sys.argv[2] == "2":
-                if sys.argv[3] == "model1":
-                    input_model = "normal_model1_brain_tumor_categories_2_model.h5"
-                elif sys.argv[3] == "model2":
-                    input_model = "normal_model2_brain_tumor_categories_2_model.h5"
-                elif sys.argv[3] == "model3":
-                    input_model = "normal_model3_brain_tumor_categories_2_model.h5"
+            if sys.argv[2] == "model1":
+                input_model = "model1_computer_vision_categories_2_model.h5"
+            elif sys.argv[2] == "model2":
+                input_model = "model2_computer_vision_categories_2_model.h5"
+            elif sys.argv[2] == "model3":
+                input_model = "model3_computer_vision_categories_2_model.h5"
 
-            elif sys.argv[2] == "4":
-                if sys.argv[3] == "model1":
-                    input_model = "normal_model1_brain_tumor_categories_4_model.h5"
-                elif sys.argv[3] == "model2":
-                    input_model = "normal_model2_brain_tumor_categories_4_model.h5"
-                elif sys.argv[3] == "model3":
-                    input_model = "normal_model3_brain_tumor_categories_4_model.h5"
-
-            computer_vision_analysis_obj = classification_with_model(saved_model=input_model, number_classes=sys.argv[2])
+            computer_vision_analysis_obj = classification_with_model(saved_model=input_model)
 
         if sys.argv[1] == "transfer_learning":
 
-            if sys.argv[2] == "2":
-                if sys.argv[3] == "model1":
-                    input_model = "normal_model1_brain_tumor_categories_2_model.h5"
-                elif sys.argv[3] == "model2":
-                    input_model = "normal_model2_brain_tumor_categories_2_model.h5"
-                elif sys.argv[3] == "model3":
-                    input_model = "normal_model3_brain_tumor_categories_2_model.h5"
+            if sys.argv[2] == "model1":
+                input_model = "model1_computer_vision_categories_2_model.h5"
+            elif sys.argv[2] == "model2":
+                input_model = "model2_computer_vision_categories_2_model.h5"
+            elif sys.argv[2] == "model3":
+                input_model = "model3_computer_vision_categories_2_model.h5"
 
-            elif sys.argv[2] == "4":
-                if sys.argv[3] == "model1":
-                    input_model = "normal_model1_brain_tumor_categories_4_model.h5"
-                elif sys.argv[3] == "model2":
-                    input_model = "normal_model2_brain_tumor_categories_4_model.h5"
-                elif sys.argv[3] == "model3":
-                    input_model = "normal_model3_brain_tumor_categories_4_model.h5"
-            
-            computer_vision_analysis_obj = transfer_learning(saved_model=input_model, model_type=sys.argv[3], random_noise_count=sys.argv[5])
+            computer_vision_analysis_obj = transfer_learning(saved_model=input_model, model_type=sys.argv[2], random_noise_count=sys.argv[3])
 
         if sys.argv[1] == "continuous_learning":
             
-            if sys.argv[2] == "2":
-                if sys.argv[3] == "model1":
-                    input_model = "normal_model1_brain_tumor_categories_2_model.h5"
-                elif sys.argv[3] == "model2":
-                    input_model = "normal_model2_brain_tumor_categories_2_model.h5"
-                elif sys.argv[3] == "model3":
-                    input_model = "normal_model3_brain_tumor_categories_2_model.h5"
-
-            elif sys.argv[2] == "4":
-                if sys.argv[3] == "model1":
-                    input_model = "normal_model1_brain_tumor_categories_4_model.h5"
-                elif sys.argv[3] == "model2":
-                    input_model = "normal_model2_brain_tumor_categories_4_model.h5"
-                elif sys.argv[3] == "model3":
-                    input_model = "normal_model3_brain_tumor_categories_4_model.h5"
+            if sys.argv[2] == "model1":
+                input_model = "model1_computer_vision_categories_2_model.h5"
+            elif sys.argv[2] == "model2":
+                input_model = "model2_computer_vision_categories_2_model.h5"
+            elif sys.argv[2] == "model3":
+                input_model = "model3_computer_vision_categories_2_model.h5"
             
-            computer_vision_analysis_obj = continuous_learning(saved_model=input_model, model_type=sys.argv[3], episode=5, algorithm_name=sys.argv[5], transfer_learning="true")
+            computer_vision_analysis_obj = continuous_learning(saved_model=input_model, model_type=sys.argv[2], episode=5, algorithm_name=sys.argv[4], transfer_learning="true")
 
         if sys.argv[1] == "localization_detection":
             
-            if sys.argv[2] == "2":
-                if sys.argv[3] == "model1":
-                    input_model = "normal_model1_brain_tumor_categories_2_model.h5"
-                elif sys.argv[3] == "model2":
-                    input_model = "normal_model2_brain_tumor_categories_2_model.h5"
-                elif sys.argv[3] == "model3":
-                    input_model = "normal_model3_brain_tumor_categories_2_model.h5"
+            if sys.argv[2] == "model1":
+                input_model = "model1_computer_vision_categories_2_model.h5"
+            elif sys.argv[2] == "model2":
+                input_model = "model2_computer_vision_categories_2_model.h5"
+            elif sys.argv[2] == "model3":
+                input_model = "model3_computer_vision_categories_2_model.h5"
 
-            elif sys.argv[2] == "4":
-                if sys.argv[3] == "model1":
-                    input_model = "normal_model1_brain_tumor_categories_4_model.h5"
-                elif sys.argv[3] == "model2":
-                    input_model = "normal_model2_brain_tumor_categories_4_model.h5"
-                elif sys.argv[3] == "model3":
-                    input_model = "normal_model3_brain_tumor_categories_4_model.h5"
-            
-            computer_vision_analysis_obj = localization_detection(saved_model=input_model, number_classes=sys.argv[2])
+            computer_vision_analysis_obj = localization_detection(saved_model=input_model)
 
 
         if sys.argv[1] == "segmentation":
             
-            if sys.argv[2] == "2":
-                if sys.argv[3] == "model1":
-                    input_model = "normal_model1_brain_tumor_categories_2_model.h5"
-                elif sys.argv[3] == "model2":
-                    input_model = "normal_model2_brain_tumor_categories_2_model.h5"
-                elif sys.argv[3] == "model3":
-                    input_model = "normal_model3_brain_tumor_categories_2_model.h5"
+            if sys.argv[2] == "model1":
+                input_model = "model1_computer_vision_categories_2_model.h5"
+            elif sys.argv[2] == "model2":
+                input_model = "model2_computer_vision_categories_2_model.h5"
+            elif sys.argv[2] == "model3":
+                input_model = "model3_computer_vision_categories_2_model.h5"
 
-            elif sys.argv[2] == "4":
-                if sys.argv[3] == "model1":
-                    input_model = "normal_model1_brain_tumor_categories_4_model.h5"
-                elif sys.argv[3] == "model2":
-                    input_model = "normal_model2_brain_tumor_categories_4_model.h5"
-                elif sys.argv[3] == "model3":
-                    input_model = "normal_model3_brain_tumor_categories_4_model.h5"
-            
-            computer_vision_analysis_obj = segmentation(saved_model=input_model, number_classes=sys.argv[2])
+            computer_vision_analysis_obj = segmentation(saved_model=input_model)
 
 
 

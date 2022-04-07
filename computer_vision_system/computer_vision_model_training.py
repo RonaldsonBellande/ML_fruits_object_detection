@@ -35,13 +35,13 @@ class model_training(model_building):
                 shuffle=True)
        
         self.get_training_time("ending --: ")
-        self.model.save(self.model_path + self.model_type + "_brain_tumor_categories_"+ str(self.number_classes)+"_model.h5")
+        self.model.save(self.model_path + self.model_type + "_computer_vision_"+ str(self.number_classes)+"_model.h5")
    
 
     def evaluate_model(self):
         evaluation = self.model.evaluate(self.X_test, self.Y_test, verbose=1)
 
-        with open("graph_charts/" + self.model_type + "_evaluate_brain_tumor_category_" + str(self.number_classes) + ".txt", 'w') as write:
+        with open("graph_charts/" + self.model_type + "_evaluate_computer_vision_category_" + str(self.number_classes) + ".txt", 'w') as write:
             write.writelines("Loss: " + str(evaluation[0]) + "\n")
             write.writelines("Accuracy: " + str(evaluation[1]))
         

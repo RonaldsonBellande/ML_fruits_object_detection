@@ -2,16 +2,14 @@ from header_imports import *
 
 
 class transfer_learning(models):
-    def __init__(self, saved_model, model_type, number_classes, image_type, random_noise_count):
+    def __init__(self, saved_model, model_type, random_noise_count):
         
         self.image_file = []
         self.label_name = []
-        self.number_classes = int(number_classes)
         self.random_noise_count = int(random_noise_count)
         self.image_size = 240
         self.saved_model = saved_model
         self.number_of_nodes = 16
-        self.image_type = image_type
 
         self.valid_images = [".jpg",".png"]
         self.model_summary = "model_summary/"
@@ -48,41 +46,16 @@ class transfer_learning(models):
 
     def setup_structure(self):
         
-        if self.number_classes == 2:
-            self.path  = "brain_cancer_category_2/"
-            if self.image_type == "normal":
-                self.true_path = self.path + "brain_cancer_seperate_category_2/"
-            elif self.image_type == "edge_1":
-                self.true_path = self.path + "brain_cancer_seperate_category_2_edge_1/"
-            elif self.image_type == "edge_2":
-                self.true_path = self.path + "brain_cancer_seperate_category_2_edge_2/"
+        self.path  = "fruits_360_datasets/"
+        self.true_path = self.path + "Training/"
+        self.category_names =  os.listdir(self.true_path)
+        self.number_classes = len(next(os.walk(self.true_path))[1])
             
-            self.category_names =  os.listdir(self.true_path)
-            self.number_classes = len(next(os.walk(self.true_path))[1])
-            
-            for i in range(self.number_classes):
-                self.check_valid(self.category_names[i])
+        for i in range(self.number_classes):
+            self.check_valid(self.category_names[i])
 
-            for i in range(self.number_classes):
-                self.resize_image_and_label_image(self.category_names[i])
-
-        elif self.number_classes == 4:
-            self.path = "brain_cancer_category_4/"
-            if self.image_type == "normal":
-            	self.true_path = self.path + "brain_cancer_seperate_category_4/"
-            elif self.image_type == "edge_1":
-                self.true_path = self.path + "brain_cancer_seperate_category_4_edge_1/"
-            elif self.image_type == "edge_2":
-                self.true_path = self.path + "brain_cancer_seperate_category_4_edge_2/"
-            
-            self.category_names =  os.listdir(self.true_path)
-            self.number_classes = len(next(os.walk(self.true_path))[1])
-            
-            for i in range(self.number_classes):
-                self.check_valid(self.category_names[i])
-            
-            for i in range(self.number_classes):
-                self.resize_image_and_label_image(self.category_names[i])
+        for i in range(self.number_classes):
+            self.resize_image_and_label_image(self.category_names[i])
 
         self.label_name = self.labelencoder.fit_transform(self.label_name)
         self.image_file = np.array(self.image_file)
@@ -175,7 +148,7 @@ class transfer_learning(models):
                 callbacks=[self.callback_1, self.callback_2, self.callback_3],
                 shuffle=True)
 
-        self.model.save(self.model_path + self.image_type + "_" + self.model_type + "_brain_tumor_categories_"+ str(self.number_classes)+"_model.h5")
+        self.model.save(self.model_path + self.model_type + "_computer_vision_categories_"+ str(self.number_classes)+"_model.h5")
    
 
     def evaluate_model(self):
