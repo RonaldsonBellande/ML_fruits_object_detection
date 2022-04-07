@@ -71,6 +71,7 @@ class model_training(model_building):
         plt.clf()
 
 
+
     def plot_random_examples(self):
 
         plt.figure( dpi=256)
