@@ -2,8 +2,8 @@ from header_imports import *
 
 
 class model_training(model_building):
-    def __init__(self, number_classes, model_type, image_type, random_noise_count):
-        super().__init__(number_classes, model_type, image_type, random_noise_count)
+    def __init__(self, model_type, random_noise_count):
+        super().__init__(model_type, random_noise_count)
 
         self.batch_size = [10, 20, 40, 60, 80, 100]
         self.epochs = [1, 5, 10, 50, 100, 200]
@@ -35,13 +35,13 @@ class model_training(model_building):
                 shuffle=True)
        
         self.get_training_time("ending --: ")
-        self.model.save(self.model_path + self.image_type + "_" + self.model_type + "_brain_tumor_categories_"+ str(self.number_classes)+"_model.h5")
+        self.model.save(self.model_path + self.model_type + "_brain_tumor_categories_"+ str(self.number_classes)+"_model.h5")
    
 
     def evaluate_model(self):
         evaluation = self.model.evaluate(self.X_test, self.Y_test, verbose=1)
 
-        with open("graph_charts/" + self.image_type + "_" + self.model_type + "_evaluate_brain_tumor_category_" + str(self.number_classes) + ".txt", 'w') as write:
+        with open("graph_charts/" + self.model_type + "_evaluate_brain_tumor_category_" + str(self.number_classes) + ".txt", 'w') as write:
             write.writelines("Loss: " + str(evaluation[0]) + "\n")
             write.writelines("Accuracy: " + str(evaluation[1]))
         
@@ -83,7 +83,7 @@ class model_training(model_building):
             plt.axis('off')
             plt.title("Predicted - {}".format(self.category_names[np.argmax(predicted_classes[i], axis=0)]) + "\n Actual - {}".format(self.category_names[np.argmax(self.Y_test_vec[i,0])]),fontsize=1)
             plt.tight_layout()
-            plt.savefig("graph_charts/" + self.image_type + "_" + self.model_type + '_prediction' + str(self.number_classes) + '.png', dpi =500)
+            plt.savefig("graph_charts/" + self.model_type + '_prediction' + str(self.number_classes) + '.png', dpi =500)
 
 
 
@@ -92,7 +92,7 @@ class model_training(model_building):
         date_and_time = datetime.datetime.now()
         test_date_and_time = "/test_on_date_" + str(date_and_time.month) + "_" + str(date_and_time.day) + "_" + str(date_and_time.year) + "_time_at_" + date_and_time.strftime("%H:%M:%S")
 
-        with open("graph_charts/" + self.image_type + "_" + self.model_type + "_evaluate_training_time_" + str(self.number_classes) + ".txt", 'a') as write:
+        with open("graph_charts/" + self.model_type + "_evaluate_training_time_" + str(self.number_classes) + ".txt", 'a') as write:
             write.writelines(start + test_date_and_time + "\n")
 
 
