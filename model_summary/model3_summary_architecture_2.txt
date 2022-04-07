@@ -1,0 +1,73 @@
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ conv2d (Conv2D)             (None, 240, 240, 64)      3136      
+                                                                 
+ activation (Activation)     (None, 240, 240, 64)      0         
+                                                                 
+ max_pooling2d (MaxPooling2D  (None, 120, 120, 64)     0         
+ )                                                               
+                                                                 
+ dropout (Dropout)           (None, 120, 120, 64)      0         
+                                                                 
+ conv2d_1 (Conv2D)           (None, 120, 120, 32)      32800     
+                                                                 
+ activation_1 (Activation)   (None, 120, 120, 32)      0         
+                                                                 
+ dropout_1 (Dropout)         (None, 120, 120, 32)      0         
+                                                                 
+ conv2d_2 (Conv2D)           (None, 120, 120, 64)      32832     
+                                                                 
+ activation_2 (Activation)   (None, 120, 120, 64)      0         
+                                                                 
+ max_pooling2d_1 (MaxPooling  (None, 60, 60, 64)       0         
+ 2D)                                                             
+                                                                 
+ dropout_2 (Dropout)         (None, 60, 60, 64)        0         
+                                                                 
+ conv2d_3 (Conv2D)           (None, 60, 60, 32)        32800     
+                                                                 
+ activation_3 (Activation)   (None, 60, 60, 32)        0         
+                                                                 
+ dropout_3 (Dropout)         (None, 60, 60, 32)        0         
+                                                                 
+ conv2d_4 (Conv2D)           (None, 60, 60, 64)        32832     
+                                                                 
+ activation_4 (Activation)   (None, 60, 60, 64)        0         
+                                                                 
+ max_pooling2d_2 (MaxPooling  (None, 30, 30, 64)       0         
+ 2D)                                                             
+                                                                 
+ dropout_4 (Dropout)         (None, 30, 30, 64)        0         
+                                                                 
+ conv2d_5 (Conv2D)           (None, 30, 30, 32)        32800     
+                                                                 
+ activation_5 (Activation)   (None, 30, 30, 32)        0         
+                                                                 
+ dropout_5 (Dropout)         (None, 30, 30, 32)        0         
+                                                                 
+ conv2d_6 (Conv2D)           (None, 30, 30, 64)        32832     
+                                                                 
+ activation_6 (Activation)   (None, 30, 30, 64)        0         
+                                                                 
+ max_pooling2d_3 (MaxPooling  (None, 15, 15, 64)       0         
+ 2D)                                                             
+                                                                 
+ dropout_6 (Dropout)         (None, 15, 15, 64)        0         
+                                                                 
+ conv2d_7 (Conv2D)           (None, 15, 15, 32)        32800     
+                                                                 
+ activation_7 (Activation)   (None, 15, 15, 32)        0         
+                                                                 
+ dropout_7 (Dropout)         (None, 15, 15, 32)        0         
+                                                                 
+ flatten (Flatten)           (None, 7200)              0         
+                                                                 
+ dense (Dense)               (None, 2)                 14402     
+                                                                 
+=================================================================
+Total params: 247,234
+Trainable params: 247,234
+Non-trainable params: 0
+_________________________________________________________________
