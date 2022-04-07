@@ -12,10 +12,10 @@ if __name__ == "__main__":
             util.seperate_image_into_file()
 
         if sys.argv[1] == "model_building":
-            brain_analysis_obj = model_building(number_classes=sys.argv[2], model_type=sys.argv[3], image_type=sys.argv[4], random_noise_count=sys.argv[5])
+            brain_analysis_obj = model_building(model_type=sys.argv[2], random_noise_count=sys.argv[3])
 
         if sys.argv[1] == "model_training":
-            brain_analysis_obj = model_training(number_classes=sys.argv[2], model_type=sys.argv[3], image_type=sys.argv[4], random_noise_count=sys.argv[5])
+            brain_analysis_obj = model_training(model_type=sys.argv[2], random_noise_count=sys.argv[3])
 
         if sys.argv[1] == "image_prediction":
              
@@ -55,7 +55,7 @@ if __name__ == "__main__":
                 elif sys.argv[3] == "model3":
                     input_model = "normal_model3_brain_tumor_categories_4_model.h5"
             
-            computer_vision_analysis_obj = transfer_learning(saved_model=input_model, model_type=sys.argv[3], number_classes=sys.argv[2], image_type=sys.argv[4], random_noise_count=sys.argv[5])
+            computer_vision_analysis_obj = transfer_learning(saved_model=input_model, model_type=sys.argv[3], random_noise_count=sys.argv[5])
 
         if sys.argv[1] == "continuous_learning":
             
@@ -75,7 +75,7 @@ if __name__ == "__main__":
                 elif sys.argv[3] == "model3":
                     input_model = "normal_model3_brain_tumor_categories_4_model.h5"
             
-            computer_vision_analysis_obj = continuous_learning(saved_model=input_model, model_type=sys.argv[3], number_classes=sys.argv[2], image_type=sys.argv[4], episode=5, algorithm_name=sys.argv[5], transfer_learning="true")
+            computer_vision_analysis_obj = continuous_learning(saved_model=input_model, model_type=sys.argv[3], episode=5, algorithm_name=sys.argv[5], transfer_learning="true")
 
         if sys.argv[1] == "localization_detection":
             
