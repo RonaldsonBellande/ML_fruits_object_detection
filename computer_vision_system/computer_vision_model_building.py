@@ -33,6 +33,7 @@ class model_building(models):
         self.path  = "fruits_360_datasets/"
         self.true_path = self.path + "Training/"
         self.category_names =  os.listdir(self.true_path)
+        print(self.category_names)
         self.number_classes = len(next(os.walk(self.true_path))[1])
             
         for i in range(self.number_classes):
@@ -60,7 +61,7 @@ class model_building(models):
             image_resized = cv2.resize(image_resized,(self.image_size, self.image_size), interpolation = cv2.INTER_AREA)
             self.image_file.append(image_resized)
             self.label_name.append(input_file)
-            self.adding_random_noise(image_resized, input_file)
+            # self.adding_random_noise(image_resized, input_file)
 
 
     def adding_random_noise(self, image, input_file):

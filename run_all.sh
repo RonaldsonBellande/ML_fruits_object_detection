@@ -3,7 +3,7 @@
 # python3 computer_vision_analysis.py model_building model3 3
 
 
-# python3 computer_vision_analysis.py model_training model1 3
+python3 computer_vision_analysis.py model_training model1 3
 # python3 computer_vision_analysis.py model_training model2 3
 # python3 computer_vision_analysis.py model_training model3 3
 
@@ -13,7 +13,7 @@
 # python3 computer_vision_analysis.py image_prediction 2 model3
 
 
-python3 computer_vision_analysis.py transfer_learning model1 3
+# python3 computer_vision_analysis.py transfer_learning model1 3
 # python3 computer_vision_analysis.py transfer_learning model2 3
 # python3 computer_vision_analysis.py transfer_learning model3 3
 

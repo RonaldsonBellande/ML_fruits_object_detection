@@ -134,7 +134,7 @@ class transfer_learning(models):
         self.Y_train = tf.keras.utils.to_categorical(self.Y_train_vec, self.number_classes)
         self.Y_test = tf.keras.utils.to_categorical(self.Y_test_vec, self.number_classes)
         self.X_train = self.X_train.astype("float32") /255
-        self.X_test = self.X_test.astype("float32") / 255
+        self.X_test = self.X_test.astype("float32") /255
 
 
     def train_model(self):
