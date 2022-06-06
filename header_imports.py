@@ -98,8 +98,8 @@ else:
    print("CPU")
 
 
-from utilities import *
 from all_models import *
+from computer_vision_system.utilities import *
 from computer_vision_system.plot_and_animation import *
 from computer_vision_system.computer_vision_model_building import *
 from computer_vision_system.computer_vision_model_training import *

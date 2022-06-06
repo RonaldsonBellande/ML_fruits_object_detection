@@ -11,6 +11,7 @@ class model_training(model_building):
         self.graph_path = "graph_charts/"
         self.model_path = "models/" 
         self.param_grid = dict(batch_size = self.batch_size, epochs = self.epochs)
+
         self.callback_1 = TensorBoard(log_dir="logs/{}-{}".format(self.model_type, int(time.time())))
         self.callback_2 = ModelCheckpoint(filepath=self.model_path, save_weights_only=True, verbose=1)
         self.callback_3 = ReduceLROnPlateau(monitor='val_accuracy', patience=2, verbose=1, factor= 0.5, min_lr=0.00001)
