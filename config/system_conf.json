@@ -1,0 +1,44 @@
+ {
+  "dataset": {
+    "dataset1":"",
+
+    "building": {
+      "shape": 32
+    },
+    "training": {
+      "function": "Dense",
+      "value": 1
+    },
+    "transfer_learning": {
+      "optimizer": "adam",
+      "loss": "mean_squared_error"
+    },
+    "prediction": {
+      "optimizer": "adam",
+      "loss": "mean_squared_error"
+    },
+    "classification": {
+      "optimizer": "adam",
+      "loss": "mean_squared_error"
+    },
+    "classification_localization": {
+      "optimizer": "adam",
+      "loss": "mean_squared_error"
+    },
+    "semantic_segmentation": {
+      "shape": 32
+    },
+    "instance_segmentation": {
+      "function": "Dense",
+      "value": 1
+    },
+    "continuous_learning": {
+      "optimizer": "adam",
+      "loss": "mean_squared_error"
+    },
+    "detection": {
+      "optimizer": "adam",
+      "loss": "mean_squared_error"
+    }
+  }
+}

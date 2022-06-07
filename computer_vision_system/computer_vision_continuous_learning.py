@@ -1,7 +1,7 @@
 from header_imports import *
 
 
-class continuous_learning(deep_q_learning, classification_enviroment, plot_graphs):
+class continuous_learning(deep_q_learning, classification_enviroment, plot_graphs, computer_vision_utilities):
     def __init__(self, saved_model, model_type, number_classes, image_type, episode, noise=0.0, reward_noise=0.0, state_world_size=400, algorithm_name="deep_q_learning", transfer_learning="true"):
         
         self.algorithm_details_path = "graph_charts/"
@@ -52,77 +52,6 @@ class continuous_learning(deep_q_learning, classification_enviroment, plot_graph
             self.dueling_deep_q_learning()
 
         plot_graphs.__init__(self)
-
-
-    def setup_structure(self):
-        
-        if self.number_classes == 2:
-            self.path  = "brain_cancer_category_2/"
-            if self.image_type == "normal":
-                self.true_path = self.path + "Additional_Data/"
-            elif self.image_type == "edge_1":
-                self.true_path = self.path + "brain_cancer_seperate_category_2_edge_1/"
-            elif self.image_type == "edge_2":
-                self.true_path = self.path + "brain_cancer_seperate_category_2_edge_2/"
-            
-            self.category_names =  os.listdir(self.true_path)
-            self.number_classes = len(next(os.walk(self.true_path))[1])
-            
-            for i in range(self.number_classes):
-                self.check_valid(self.category_names[i])
-
-            for i in range(self.number_classes):
-                self.resize_image_and_label_image(self.category_names[i])
-
-        elif self.number_classes == 4:
-            self.path = "brain_cancer_category_4/"
-            if self.image_type == "normal":
-                self.true_path = self.path + "Additional_Data/"
-            elif self.image_type == "edge_1":
-                self.true_path = self.path + "brain_cancer_seperate_category_4_edge_1/"
-            elif self.image_type == "edge_2":
-                self.true_path = self.path + "brain_cancer_seperate_category_4_edge_2/"
-            
-            self.category_names =  os.listdir(self.true_path)
-            self.number_classes = len(next(os.walk(self.true_path))[1])
-            
-            for i in range(self.number_classes):
-                self.check_valid(self.category_names[i])
-            
-            for i in range(self.number_classes):
-                self.resize_image_and_label_image(self.category_names[i])
-
-        self.label_name = self.labelencoder.fit_transform(self.label_name)
-        self.image_file = np.array(self.image_file)
-        self.label_name = np.array(self.label_name)
-        self.label_name = self.label_name.reshape((len(self.image_file),1))
-
-
-
-    def resize_image_and_label_image(self, input_file):
-        for image in os.listdir(self.true_path + input_file):
-            image_resized = cv2.imread(os.path.join(self.true_path + input_file,image))
-            image_resized = cv2.resize(image_resized,(self.image_size, self.image_size), interpolation = cv2.INTER_AREA)
-            self.image_file.append(image_resized)
-            self.label_name.append(input_file)
-
-
-    def check_valid(self, input_file):
-
-        for img in os.listdir(self.true_path + input_file):
-            ext = os.path.splitext(img)[1]
-            if ext.lower() not in self.valid_images:
-                continue
-
-
-    def splitting_data_normalize(self):
-        
-        self.X_train, self.X_test, self.Y_train_vec, self.Y_test_vec = train_test_split(self.image_file, self.label_name, test_size = 0.10, random_state = 42)
-        self.input_shape = self.X_train.shape[1:]
-        self.Y_train = tf.keras.utils.to_categorical(self.Y_train_vec, self.number_classes)
-        self.Y_test = tf.keras.utils.to_categorical(self.Y_test_vec, self.number_classes)
-        self.X_train = self.X_train.astype("float32") / 255
-        self.X_test = self.X_test.astype("float32") / 255
 
 
     def deep_q_learning(self):
