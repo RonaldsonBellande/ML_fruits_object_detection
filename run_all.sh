@@ -1,10 +1,10 @@
 # python3 computer_vision_analysis.py model_building model1 3
-python3 computer_vision_analysis.py model_building model2 3
+# python3 computer_vision_analysis.py model_building model2 3
 # python3 computer_vision_analysis.py model_building model3 3
 
 
 # python3 computer_vision_analysis.py model_training model1 3
-# python3 computer_vision_analysis.py model_training model2 3
+python3 computer_vision_analysis.py model_training model2 3
 # python3 computer_vision_analysis.py model_training model3 3
 
 

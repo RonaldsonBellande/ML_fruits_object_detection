@@ -1,18 +1,15 @@
 # Copyright © 2021 Ronaldson Bellande
 from __future__ import print_function
-import cv2, sys, math, random, warnings, os, os.path, json, pydicom, glob, shutil, datetime, zipfile, urllib.request, keras,  tensorflow as tf, time
+import cv2, sys, math, random, warnings, os, os.path, json, pydicom, glob, shutil, datetime, zipfile, urllib.request, tensorflow as tf, time, trimesh, librosa
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from glob import glob
 from os.path import basename
 from PIL import Image, ImageDraw
-from tensorflow import keras
 from imgaug import augmenters as iaa
 from tqdm import tqdm
 from random import randint
-import trimesh
-import librosa
 
 import nvidia_smi
 from os import listdir
@@ -41,6 +38,8 @@ from mrcnn.config import Config
 from mrcnn.visualize import display_images, display_instances
 # from mrcnn.model import log
 
+import tensorflow.keras
+
 import image_slicer
 from numpy import expand_dims
 from keras.models import load_model
@@ -57,7 +56,6 @@ from tensorflow.keras.preprocessing import image
 from tensorflow.keras import layers
 from tensorflow.keras.applications import EfficientNetB0
 
-from keras.datasets import cifar10
 import keras.backend as K
 from keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras import Sequential
