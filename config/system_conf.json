@@ -1,17 +1,26 @@
  {
   "dataset": {
-    "dataset1":"",
+    "dataset_1_model1": "model1_computer_vision_categories_2_model.h5",
+    "dataset_1_model2": "model2_computer_vision_categories_2_model.h5",
+    "dataset_1_model3": "model3_computer_vision_categories_2_model.h5",
+    
+    "dataset_2_model1": "model1_computer_vision_categories_2_model.h5",
+    "dataset_2_model2": "model2_computer_vision_categories_2_model.h5",
+    "dataset_2_model3": "model3_computer_vision_categories_2_model.h5",
+
+    "dataset_1_path": "fruits_360_datasets/Training",
+    "dataset_2_path": "fruits_360_datasets/Training_Small",
 
     "building": {
-      "shape": 32
+      "model_summary": "model_summary/"
     },
     "training": {
-      "function": "Dense",
-      "value": 1
+      "graph_path": "graph_charts/",
+      "model_path": "models/", 
     },
     "transfer_learning": {
-      "optimizer": "adam",
-      "loss": "mean_squared_error"
+      "graph_path": "graph_charts/transfer_learning_with_model/",
+      "model_path": "models/transfer_learning/", 
     },
     "prediction": {
       "optimizer": "adam",
@@ -19,25 +28,21 @@
     },
     "classification": {
       "optimizer": "adam",
-      "loss": "mean_squared_error"
     },
     "classification_localization": {
       "optimizer": "adam",
-      "loss": "mean_squared_error"
     },
     "semantic_segmentation": {
       "shape": 32
     },
     "instance_segmentation": {
-      "function": "Dense",
       "value": 1
     },
     "continuous_learning": {
-      "optimizer": "adam",
-      "loss": "mean_squared_error"
+      "model_path": "models/continuous_learning/" 
+"
     },
     "detection": {
-      "optimizer": "adam",
       "loss": "mean_squared_error"
     }
   }
