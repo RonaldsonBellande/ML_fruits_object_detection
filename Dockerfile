@@ -54,7 +54,7 @@ RUN add-apt-repository ppa:deadsnakes/ppa && \
     python3.8 python3.8-dev python3-pip python3.8-venv && \
     update-alternatives --install /usr/bin/python python /usr/bin/python3.8 1
 
-
+# pip install 
 RUN pip3 install --upgrade pip
 
 RUN curl -fSsL -O https://bootstrap.pypa.io/get-pip.py && \
