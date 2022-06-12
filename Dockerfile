@@ -13,6 +13,10 @@ LABEL ml_architecture_github_commit=${ML_ARCHITECTURE_VERSION_GIT_COMMIT}
 RUN apt-get update -y
 RUN apt-get upgrade -y
 
+# RUN workspace and sourcing
+WORKDIR ./
+COPY requirements.txt .
+
  # Install dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
         apt-utils \
@@ -50,6 +54,7 @@ RUN add-apt-repository ppa:deadsnakes/ppa && \
     python3.8 python3.8-dev python3-pip python3.8-venv && \
     update-alternatives --install /usr/bin/python python /usr/bin/python3.8 1
 
+
 RUN pip3 install --upgrade pip
 
 RUN curl -fSsL -O https://bootstrap.pypa.io/get-pip.py && \
@@ -57,12 +62,6 @@ RUN curl -fSsL -O https://bootstrap.pypa.io/get-pip.py && \
     rm get-pip.py
 
 
-# RUN pip install -r requirements.txt
-WORKDIR ./
-COPY requirements.txt .
-# COPY requirements.txt .
-
 # Install python libraries
-RUN pip install -U pip setuptools \
-    && pip --no-cache-dir install -r requirements.txt
+RUN pip --no-cache-dir install -r requirements.txt
 
