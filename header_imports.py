@@ -48,6 +48,7 @@ from pycocotools.coco import COCO
 from pycocotools.cocoeval import COCOeval
 from pycocotools import mask as maskUtils
 
+from tensorflow import keras
 from tensorflow.python.client import device_lib
 from tensorflow import convert_to_tensor
 import tensorflow.keras
@@ -69,10 +70,16 @@ from tensorflow.keras.utils import to_categorical
 warnings.filterwarnings('ignore')
 plt.style.use('ggplot')
 
-
 from gpu_cpu_efficiency import *
-gpu_enable()
+type = "cpu"
+
+if type == "cpu":
+    gpu_disable()
+elif type == "gpu":
+    gpu_enable()
+
 mixed_precision()
+ram_reset()
 
 from all_models import *
 from computer_vision_system.computer_vision_utilities import *
@@ -81,8 +88,9 @@ from computer_vision_system.computer_vision_model_building import *
 from computer_vision_system.computer_vision_model_training import *
 from computer_vision_system.computer_vision_model_classification import *
 from computer_vision_system.computer_vision_model_prediction import *
-from computer_vision_system.computer_vision_model_localization_detection import *
-from computer_vision_system.computer_vision_model_segmentation import *
+from computer_vision_system.computer_vision_model_classification_localization import *
+from computer_vision_system.computer_vision_model_instance_segmentation import *
+from computer_vision_system.computer_vision_model_semantic_segmentation import *
 from computer_vision_system.computer_vision_model_transfer_learning import *
 from computer_vision_system.deep_learning_model import *
 from computer_vision_system.image_enviroment import *

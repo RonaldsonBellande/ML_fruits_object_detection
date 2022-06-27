@@ -15,7 +15,7 @@ class model_building(models, computer_vision_utilities):
         self.model_type = model_type
         
         self.labelencoder = LabelEncoder()
-        self.setup_structure() 
+        self.setup_structure()
         self.splitting_data_normalize()
         
         # Transformer
@@ -30,18 +30,24 @@ class model_building(models, computer_vision_utilities):
 
         if self.model_type == "model1":
             self.model = self.create_models_1()
-        elif self.model_type == "model2":
-            self.model = self.vit_transformer_model_1()
-        elif self.model_type == "model3":
-            self.model = self.create_model_3()
+        elif self.model_type == "vit_transformer_model":
+            self.model = self.vit_transformer_model()
+        elif self.model_type == "unet_model":
+            self.model = self.unet_model()
 
         self.save_model_summary()
+        self.display_model_archetecture()
+
 
 
     def save_model_summary(self):
         with open(self.model_summary + self.model_type +"_summary_architecture_" + str(self.number_classes) +".txt", "w+") as model:
             with redirect_stdout(model):
                 self.model.summary()
+
+
+    def display_model_archetecture(self):
+        keras.utils.plot_model(self.model, to_file=self.model_summary + self.model_type +"_architecture_" + str(self.number_classes) +".png", show_shapes=True, show_layer_names=True)
 
 
     

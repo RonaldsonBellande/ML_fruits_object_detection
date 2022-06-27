@@ -13,7 +13,7 @@ def gpu_enable():
 
     if info.free < 964157696:
         os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
-
+    
     device_name = [x.name for x in device_lib.list_local_devices() if x.device_type == 'GPU']
     if device_name != []:
         gpus = tf.config.experimental.list_physical_devices('GPU')
@@ -58,7 +58,21 @@ def mixed_precision():
         when you make and train your model properly
     '''
 
-    mixed_precision.set_global_policy('mixed_float16')
+    tf.keras.mixed_precision.set_global_policy('mixed_float16')
+
+
+
+
+def ram_reset():
+    '''
+    Allows for running multiple instants of models since it will clear the global states in RAM
+
+        Benifits: Multiple model run one after the other
+
+        Disadvantages: None
+    '''
+
+    tf.keras.backend.clear_session()
 
 
 
