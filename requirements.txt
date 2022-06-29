@@ -20,8 +20,8 @@ pytest-shutil
 DateTime
 zipfile36
 urllib3
-tensorflow==2.7.0
-keras==2.3.1
+tensorflow>=2.7.0
+keras>=2.3.1
 python-time
 trimesh
 librosa
