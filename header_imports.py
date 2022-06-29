@@ -81,6 +81,8 @@ elif type == "gpu":
 mixed_precision()
 ram_reset()
 
+
+from model_utilities import *
 from all_models import *
 from computer_vision_system.computer_vision_utilities import *
 from computer_vision_system.plot_and_animation import *

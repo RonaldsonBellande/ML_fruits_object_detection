@@ -21,8 +21,17 @@ class models(object):
     def unet_model(self):
         inputs = keras.Input(shape=self.input_shape)
 
+        augmentation = keras.Sequential([
+            layers.Normalization(),
+            layers.Resizing(self.image_size, self.image_size),
+            layers.RandomFlip("horizontal"),
+            layers.RandomRotation(factor=0.02),
+            layers.RandomZoom(height_factor=0.2, width_factor=0.2),
+        ])
+        augmented = augmentation(inputs)
+
         ### [First half of the network: downsampling inputs] ###
-        x = layers.Conv2D(32, 3, strides=2, padding="same")(inputs)
+        x = layers.Conv2D(32, 3, strides=2, padding="same")(augmented)
         x = layers.BatchNormalization()(x)
         x = layers.Activation("relu")(x)
 
@@ -81,8 +90,8 @@ class models(object):
             layers.RandomRotation(factor=0.02),
             layers.RandomZoom(height_factor=0.2, width_factor=0.2),
         ])
-        
         augmented = augmentation(inputs)
+        
         patches = Patches(self.patch_size)(augmented)
         encoded_patches = PatchEncoder(self.num_patches, self.projection_dim)(patches)
 
@@ -118,8 +127,17 @@ class models(object):
     def cnn_lstm_model(self):
 
         input = layers.Input(shape=self.input_shape)
+        
+        augmentation = keras.Sequential([
+            layers.Normalization(),
+            layers.Resizing(self.image_size, self.image_size),
+            layers.RandomFlip("horizontal"),
+            layers.RandomRotation(factor=0.02),
+            layers.RandomZoom(height_factor=0.2, width_factor=0.2),
+        ])
+        augmented = augmentation(inputs)
 
-        x = layers.ConvLSTM2D(filters=64, kernel_size=(5, 5), padding="same", return_sequences=True, activation="relu",)(input)
+        x = layers.ConvLSTM2D(filters=64, kernel_size=(5, 5), padding="same", return_sequences=True, activation="relu",)(augmented)
         x = layers.BatchNormalization()(x)
         x = layers.ConvLSTM2D(filters=64, kernel_size=(3, 3), padding="same", return_sequences=True, activation="relu",)(x)
         x = layers.BatchNormalization()(x)
@@ -135,34 +153,3 @@ class models(object):
 
 
 
-
-class PatchEncoder(layers.Layer):
-    def __init__(self, num_patches, projection_dim):
-        super(PatchEncoder, self).__init__()
-        self.num_patches = num_patches
-        self.projection = layers.Dense(units=projection_dim)
-        self.position_embedding = layers.Embedding(input_dim=num_patches, output_dim=projection_dim)
-
-    def call(self, patch):
-        positions = tf.range(start=0, limit=self.num_patches, delta=1)
-        encoded = self.projection(patch) + self.position_embedding(positions)
-        return encoded
-
-
-class Patches(layers.Layer):
-    def __init__(self, patch_size):
-        super(Patches, self).__init__()
-        self.patch_size = patch_size
-
-    def call(self, images):
-        batch_size = tf.shape(images)[0]
-        patches = tf.image.extract_patches(
-            images=images,
-            sizes=[1, self.patch_size, self.patch_size, 1],
-            strides=[1, self.patch_size, self.patch_size, 1],
-            rates=[1, 1, 1, 1],
-            padding="VALID",
-        )
-        patch_dims = patches.shape[-1]
-        patches = tf.reshape(patches, [batch_size, -1, patch_dims])
-        return patches
