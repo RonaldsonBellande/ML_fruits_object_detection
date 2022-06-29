@@ -115,7 +115,7 @@ class models(object):
 
 
     # CNN with LSTM models
-    def cnn_lstm_model_1(self):
+    def cnn_lstm_model(self):
 
         input = layers.Input(shape=self.input_shape)
 

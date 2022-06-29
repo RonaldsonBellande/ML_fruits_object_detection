@@ -2,8 +2,8 @@ from header_imports import *
 
 
 class model_training(model_building):
-    def __init__(self, model_type, random_noise_count):
-        super().__init__(model_type, random_noise_count)
+    def __init__(self, config, model_type, random_noise_count):
+        super().__init__(config,model_type, random_noise_count)
 
         self.batch_size = [10, 20, 40, 60, 80, 100]
         self.epochs = [1, 5, 10, 50, 100, 200]

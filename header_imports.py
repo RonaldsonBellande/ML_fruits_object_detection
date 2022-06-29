@@ -95,3 +95,8 @@ from computer_vision_system.computer_vision_model_transfer_learning import *
 from computer_vision_system.deep_learning_model import *
 from computer_vision_system.image_enviroment import *
 from computer_vision_system.computer_vision_continuous_learning import *
+
+# testinng
+from tests.file_test.py import *
+from tests.paths_test.py import *
+from tests.model_test.py import *

@@ -1,7 +1,7 @@
 from header_imports import *
 
 class model_building(models, computer_vision_utilities):
-    def __init__(self, model_type, random_noise_count):
+    def __init__(self, config, model_type, random_noise_count):
 
         self.image_file = []
         self.label_name = []

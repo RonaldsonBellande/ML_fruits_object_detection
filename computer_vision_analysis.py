@@ -1,77 +1,44 @@
 from header_imports import *
 
 if __name__ == "__main__":
-    
-    if len(sys.argv) != 1:
-        if sys.argv[1] == "create":
-            util = utilities()
-            util.seperate_image_base_on_image(nested_folders = "True")
+   
+    with open("config/system_config.json") as (file):
+        system_config = json.load(file)
 
-        if sys.argv[1] == "seperate":
-            util = utilities()
-            util.seperate_image_into_file()
+    if len(sys.argv) != 1:
+
+        if sys.argv[2] == "model1":
+            input_model =  system_config["dataset_1_model1"]
+        elif sys.argv[2] == "vit_transformer_model":
+            input_model = system_config["dataset_1_model1"]
+        elif sys.argv[2] == "unet_model":
+            input_model = system_config["dataset_1_model1"]
+        
 
         if sys.argv[1] == "model_building":
-            brain_analysis_obj = model_building(model_type=sys.argv[2], random_noise_count=sys.argv[3])
+            brain_analysis_obj = model_building(config=system_config, model_type=sys.argv[2], random_noise_count=sys.argv[3])
 
         if sys.argv[1] == "model_training":
-            brain_analysis_obj = model_training(model_type=sys.argv[2], random_noise_count=sys.argv[3])
+            brain_analysis_obj = model_training(config=system_config, model_type=sys.argv[2], random_noise_count=sys.argv[3])
 
-        if sys.argv[1] == "image_prediction":
-             
-            if sys.argv[2] == "model1":
-                input_model = "model1_computer_vision_categories_2_model.h5"
-            elif sys.argv[2] == "model2":
-                input_model = "model2_computer_vision_categories_2_model.h5"
-            elif sys.argv[2] == "model3":
-                input_model = "model3_computer_vision_categories_2_model.h5"
 
-            computer_vision_analysis_obj = classification_with_model(saved_model=input_model)
+        if sys.argv[1] == "classification":
+            computer_vision_analysis_obj = classification_with_model(config=system_config, saved_model=input_model)
 
         if sys.argv[1] == "transfer_learning":
-
-            if sys.argv[2] == "model1":
-                input_model = "model1_computer_vision_categories_2_model.h5"
-            elif sys.argv[2] == "model2":
-                input_model = "model2_computer_vision_categories_2_model.h5"
-            elif sys.argv[2] == "model3":
-                input_model = "model3_computer_vision_categories_2_model.h5"
-
-            computer_vision_analysis_obj = transfer_learning(saved_model=input_model, model_type=sys.argv[2], random_noise_count=sys.argv[3])
+            computer_vision_analysis_obj = transfer_learning(config=system_config, saved_model=input_model, model_type=sys.argv[2], random_noise_count=sys.argv[3])
 
         if sys.argv[1] == "continuous_learning":
-            
-            if sys.argv[2] == "model1":
-                input_model = "model1_computer_vision_categories_2_model.h5"
-            elif sys.argv[2] == "model2":
-                input_model = "model2_computer_vision_categories_2_model.h5"
-            elif sys.argv[2] == "model3":
-                input_model = "model3_computer_vision_categories_2_model.h5"
-            
-            computer_vision_analysis_obj = continuous_learning(saved_model=input_model, model_type=sys.argv[2], episode=5, algorithm_name=sys.argv[4], transfer_learning="true")
+            computer_vision_analysis_obj = continuous_learning(config=system_config, saved_model=input_model, model_type=sys.argv[2], episode=5, algorithm_name=sys.argv[4], transfer_learning="true")
 
-        if sys.argv[1] == "localization_detection":
-            
-            if sys.argv[2] == "model1":
-                input_model = "model1_computer_vision_categories_2_model.h5"
-            elif sys.argv[2] == "model2":
-                input_model = "model2_computer_vision_categories_2_model.h5"
-            elif sys.argv[2] == "model3":
-                input_model = "model3_computer_vision_categories_2_model.h5"
+        if sys.argv[1] == "classification_localization":
+            computer_vision_analysis_obj = classification_localization(config=system_config, saved_model=input_model)
 
-            computer_vision_analysis_obj = localization_detection(saved_model=input_model)
+        if sys.argv[1] == "instance_segmentation":
+            computer_vision_analysis_obj = instance_segmentation(config=system_config, saved_model=input_model)
 
-
-        if sys.argv[1] == "segmentation":
-            
-            if sys.argv[2] == "model1":
-                input_model = "model1_computer_vision_categories_2_model.h5"
-            elif sys.argv[2] == "model2":
-                input_model = "model2_computer_vision_categories_2_model.h5"
-            elif sys.argv[2] == "model3":
-                input_model = "model3_computer_vision_categories_2_model.h5"
-
-            computer_vision_analysis_obj = segmentation(saved_model=input_model)
+        if sys.argv[1] == "semantic_segmentation":
+            computer_vision_analysis_obj = semantic_segmentation(config=system_config, saved_model=input_model)
 
 
 
