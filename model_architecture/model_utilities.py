@@ -56,7 +56,7 @@ class ShiftedPatchTokenization(layers.Layer):
             crop_width = 0
             shift_height = 0
             shift_width = self.half_patch
-        else:
+        elif shift == "right-down":
             crop_height = 0
             crop_width = 0
             shift_height = self.half_patch
@@ -112,17 +112,16 @@ class RandomPatchNoise(layers.Layer):
         super(RandomPatchNoise, self).__init__()
 
     def adding_random_noise(self, image, noise_type):
-       
-        if noise_type == "Gaussian": 
-            # Gaussian noise 
+      
+        if noise_type == "Gaussian":
+            # Gaussian noise
             for i in range(self.random_noise_count):
                 gaussian_noise = np.random.normal(0, (10 **0.5), image.shape)
                 image = image + gaussian_noise
                 self.image_file.append(image)
 
-
-        elif noise_type == "SaltPepper": 
-            # Salt and pepper noise 
+        elif noise_type == "SaltPepper":
+            # Salt and pepper noise
             for i in range(self.random_noise_count):
                 probability = 0.02
                 for i in range(image.shape[0]):
@@ -134,24 +133,21 @@ class RandomPatchNoise(layers.Layer):
                             image[i][j] = 255
                 self.image_file.append(image)
 
-
-        elif noise_type == "Poisson": 
+        elif noise_type == "Poisson":
             # Poisson noise
             for i in range(self.random_noise_count):
                 poisson_noise = np.sqrt(image) * np.random.normal(0, 1, image.shape)
                 noisy_image = image + poisson_noise
                 self.image_file.append(image)
 
-
-        elif noise_type == "Speckle": 
+        elif noise_type == "Speckle":
             # Speckle noise
             for i in range(self.random_noise_count):
                 speckle_noise = np.random.normal(0, (10 **0.5), image.shape)
                 image = image + image * speckle_noise
                 self.image_file.append(image)
 
-
-        else: 
+        elif noise_type == "Uniform":
             # Uniform noise
             for i in range(self.random_noise_count):
                 uniform_noise = np.random.uniform(0,(10 **0.5), image.shape)
@@ -180,7 +176,7 @@ class RandomPatchNoise(layers.Layer):
             padding="VALID",
         )
         flat_patches = self.flatten_patches(patches)
-        
+       
         # Layer normalize the flat patches and linearly project it
         tokens = self.layer_norm(flat_patches)
         tokens = self.projection(tokens)
