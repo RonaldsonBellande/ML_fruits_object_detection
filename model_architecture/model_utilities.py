@@ -31,29 +31,27 @@ class Patches(layers.Layer):
         return patches
 
 
-
 class ShiftedPatchTokenization(layers.Layer):
-    def __init__(self, vanilla=False):
-        super().__init__()
-        self.vanilla = vanilla  # Flag to swtich to vanilla patsize
+    def __init__(self):
+        super(ShiftedPatchTokenization, self).__init__()
         self.half_patch = self.patch_size // 2
         self.flatten_patches = layers.Reshape((self.num_patches, -1))
         self.projection = layers.Dense(units=self.projection_dim)
         self.layer_norm = layers.LayerNormalization(epsilon=self.epsilon)
 
-    def crop_shift_pad(self, images, mode):
+    def crop_shift_pad(self, images, shift):
         # Build the diagonally shifted images
-        if mode == "left-up":
+        if shift == "left-up":
             crop_height = self.half_patch
             crop_width = self.half_patch
             shift_height = 0
             shift_width = 0
-        elif mode == "left-down":
+        elif shift == "left-down":
             crop_height = 0
             crop_width = self.half_patch
             shift_height = self.half_patch
             shift_width = 0
-        elif mode == "right-up":
+        elif shift == "right-up":
             crop_height = self.half_patch
             crop_width = 0
             shift_height = 0
@@ -82,18 +80,16 @@ class ShiftedPatchTokenization(layers.Layer):
         return shift_pad
 
     def call(self, images):
-        if not self.vanilla:
-            # Concat the shifted images with the original image
-            images = tf.concat(
-                [
-                    images,
-                    self.crop_shift_pad(images, mode="left-up"),
-                    self.crop_shift_pad(images, mode="left-down"),
-                    self.crop_shift_pad(images, mode="right-up"),
-                    self.crop_shift_pad(images, mode="right-down"),
-                ],
-                axis=-1,
-            )
+        images = tf.concat(
+            [
+                images,
+                self.crop_shift_pad(images, shift="left-up"),
+                self.crop_shift_pad(images, shift="left-down"),
+                self.crop_shift_pad(images, shift="right-up"),
+                self.crop_shift_pad(images, shift="right-down"),
+            ],
+            axis=-1,
+        )
         # Patchify the images and flatten it
         patches = tf.image.extract_patches(
             images=images,
@@ -103,68 +99,91 @@ class ShiftedPatchTokenization(layers.Layer):
             padding="VALID",
         )
         flat_patches = self.flatten_patches(patches)
-        if not self.vanilla:
-            # Layer normalize the flat patches and linearly project it
-            tokens = self.layer_norm(flat_patches)
-            tokens = self.projection(tokens)
-        else:
-            # Linearly project the flat patches
-            tokens = self.projection(flat_patches)
+        
+        # Layer normalize the flat patches and linearly project it
+        tokens = self.layer_norm(flat_patches)
+        tokens = self.projection(tokens)
+
         return (tokens, patches)
 
 
-class Patches(layers.Layer):
+class RandomPatchNoise(layers.Layer):
     def __init__(self, patch_size):
-        super(Patches, self).__init__()
-        self.patch_size = patch_size
+        super(RandomPatchNoise, self).__init__()
 
-    def adding_random_noise(self, image, input_file):
-        
-        # Gaussian noise 
-        for i in range(self.random_noise_count):
-            gaussian_noise = np.random.normal(0, (10 **0.5), image.shape)
-            image = image + gaussian_noise
-            self.image_file.append(image)
-            self.label_name.append(input_file)
-
-
-        # Salt and pepper noise 
-        for i in range(self.random_noise_count):
-            probability = 0.02
-            for i in range(image.shape[0]):
-                for j in range(image.shape[1]):
-                    random_num = random.random()
-                    if random_num < probability:
-                        image[i][j] = 0
-                    elif random_num > (1 - probability):
-                        image[i][j] = 255
-            self.image_file.append(image)
-            self.label_name.append(input_file)
+    def adding_random_noise(self, image, noise_type):
+       
+        if noise_type == "Gaussian": 
+            # Gaussian noise 
+            for i in range(self.random_noise_count):
+                gaussian_noise = np.random.normal(0, (10 **0.5), image.shape)
+                image = image + gaussian_noise
+                self.image_file.append(image)
 
 
-        # Poisson noise
-        for i in range(self.random_noise_count):
-            poisson_noise = np.sqrt(image) * np.random.normal(0, 1, image.shape)
-            noisy_image = image + poisson_noise
-            self.image_file.append(image)
-            self.label_name.append(input_file)
+        elif noise_type == "SaltPepper": 
+            # Salt and pepper noise 
+            for i in range(self.random_noise_count):
+                probability = 0.02
+                for i in range(image.shape[0]):
+                    for j in range(image.shape[1]):
+                        random_num = random.random()
+                        if random_num < probability:
+                            image[i][j] = 0
+                        elif random_num > (1 - probability):
+                            image[i][j] = 255
+                self.image_file.append(image)
 
 
-        # Speckle noise
-        for i in range(self.random_noise_count):
-            speckle_noise = np.random.normal(0, (10 **0.5), image.shape)
-            image = image + image * speckle_noise
-            self.image_file.append(image)
-            self.label_name.append(input_file)
+        elif noise_type == "Poisson": 
+            # Poisson noise
+            for i in range(self.random_noise_count):
+                poisson_noise = np.sqrt(image) * np.random.normal(0, 1, image.shape)
+                noisy_image = image + poisson_noise
+                self.image_file.append(image)
 
 
-        # Uniform noise
-        for i in range(self.random_noise_count):
-            uniform_noise = np.random.uniform(0,(10 **0.5), image.shape)
-            image = image + uniform_noise
-            self.image_file.append(image)
-            self.label_name.append(input_file)
+        elif noise_type == "Speckle": 
+            # Speckle noise
+            for i in range(self.random_noise_count):
+                speckle_noise = np.random.normal(0, (10 **0.5), image.shape)
+                image = image + image * speckle_noise
+                self.image_file.append(image)
+
+
+        else: 
+            # Uniform noise
+            for i in range(self.random_noise_count):
+                uniform_noise = np.random.uniform(0,(10 **0.5), image.shape)
+                image = image + uniform_noise
+                self.image_file.append(image)
 
 
     def call(self, images):
-        batch_size = tf.shape(images)[0]
+        images = tf.concat(
+            [
+                images,
+                self.adding_random_noise(images, noise_type="Gaussian"),
+                self.adding_random_noise(images, noise_type="SaltPepper"),
+                self.adding_random_noise(images, noise_type="Poisson"),
+                self.adding_random_noise(images, noise_type="Speckle"),
+                self.adding_random_noise(images, noise_type="Uniform"),
+            ],
+            axis=-1,
+        )
+        # Patchify the images and flatten it
+        patches = tf.image.extract_patches(
+            images=images,
+            sizes=[1, self.patch_size, self.patch_size, 1],
+            strides=[1, self.patch_size, self.patch_size, 1],
+            rates=[1, 1, 1, 1],
+            padding="VALID",
+        )
+        flat_patches = self.flatten_patches(patches)
+        
+        # Layer normalize the flat patches and linearly project it
+        tokens = self.layer_norm(flat_patches)
+        tokens = self.projection(tokens)
+
+        return (tokens, patches)
+

@@ -73,7 +73,7 @@ class models(object):
             previous_block_activation = x
 
         outputs = layers.Conv2D(self.number_classes, 3, activation="softmax", padding="same")(x)
-        model = keras.Model(inputs, outputs)
+        model = keras.Model(inputs=inputs, outputs=outputs)
         
         return model
 
@@ -109,8 +109,8 @@ class models(object):
         representation = layers.Flatten()(representation)
         representation = layers.Dropout(0.5)(representation)
         features = self.multilayer_perceptron(representation, self.mlp_head_units, 0.5)
-        logits = layers.Dense(self.number_classes)(features)
-        model = keras.Model(inputs=inputs, outputs=logits)
+        outputs = layers.Dense(self.number_classes)(features)
+        model = keras.Model(inputs=inputs, outputs=outputs)
 
         return model
 
