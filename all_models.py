@@ -94,10 +94,12 @@ class models(object):
         augmented = augmentation(inputs)
         patches = Patches()(augmented)
         encoded_patches = PatchEncoder()(patches)
+        shift_patches = ShiftedPatchTokenization()(encoded_patches)
+        noise_patches = RandomPatchNoise()(shift_patches) 
 
         # Create multiple layers of the Transformer block.
         for _ in range(self.transformer_layers):
-            x1 = layers.LayerNormalization(epsilon=self.epsilon)(encoded_patches)
+            x1 = layers.LayerNormalization(epsilon=self.epsilon)(noise_patches)
             attention_output = layers.MultiHeadAttention(num_heads=self.num_heads, key_dim=self.projection_dim, dropout=0.1)(x1, x1)
             x2 = layers.Add()([attention_output, encoded_patches])
             x3 = layers.LayerNormalization(epsilon=self.epsilon)(x2)
@@ -162,8 +164,79 @@ class models(object):
             layers.RandomRotation(factor=0.02),
             layers.RandomZoom(height_factor=0.2, width_factor=0.2),
         ])
+        augmented = augmentation(inputs)
+        patches = Patches()(augmented)
+        encoded_patches = PatchEncoder()(patches)
+        shift_patches = ShiftedPatchTokenization()(encoded_patches)
+        noise_patches = RandomPatchNoise()(shift_patches) 
 
 
+        # Create multiple layers of the Transformer block.
+        for _ in range(self.transformer_layers):
+            x1 = layers.LayerNormalization(epsilon=self.epsilon)(noise_patches)
+            attention_output = layers.MultiHeadAttention(num_heads=self.num_heads, key_dim=self.projection_dim, dropout=0.1)(x1, x1)
+            x2 = layers.Add()([attention_output, encoded_patches])
+            x3 = layers.LayerNormalization(epsilon=self.epsilon)(x2)
+            x3 = self.multilayer_perceptron(x3, self.transformer_units, 0.1)
+            encoded_patches = layers.Add()([x3, x2])
+
+
+        ### [First half of the network: downsampling inputs] ###
+        x = layers.ConvLSTM2D(32, 3, strides=2, padding="same", return_sequences=True, activation="relu")(noise_patches)
+        x = layers.BatchNormalization()(x)
+        x = layers.Activation("relu")(x)
+
+        previous_block_activation = x
+
+        # Blocks 1, 2, 3 are identical apart from the feature depth.
+        for filters in [64, 128, 256]:
+            x = layers.Activation("relu")(x)
+            x = layers.SeparableConv2D(filters, 3, padding="same")(x)
+            x = layers.BatchNormalization()(x)
+
+            x = layers.Activation("relu")(x)
+            x = layers.SeparableConv2D(filters, 3, padding="same")(x)
+            x = layers.BatchNormalization()(x)
+
+            x = layers.MaxPooling2D(3, strides=2, padding="same")(x)
+
+            # Project residual
+            residual = layers.ConvLSTM2D(filters, 1, strides=2, padding="same", return_sequences=True, activation="relu")(previous_block_activation)
+            x = layers.add([x, residual])  # Add back residual
+            previous_block_activation = x
+
+        ### [Second half of the network: upsampling inputs] ###
+        for filters in [256, 128, 64, 32]:
+            x = layers.Activation("relu")(x)
+            x = layers.Conv2DTranspose(filters, 3, padding="same")(x)
+            x = layers.BatchNormalization()(x)
+
+            x = layers.Activation("relu")(x)
+            x = layers.Conv2DTranspose(filters, 3, padding="same")(x)
+            x = layers.BatchNormalization()(x)
+
+            x = layers.UpSampling2D(2)(x)
+
+            # Project residual
+            residual = layers.UpSampling2D(2)(previous_block_activation)
+            residual = layers.ConvLSTM2D(filters, 1, padding="same", return_sequences=True, activation="relu")(residual)
+            x = layers.add([x, residual])  # Add back residual
+            previous_block_activation = x
+
+
+        # Create a [batch_size, projection_dim] tensor.
+        representation = layers.LayerNormalization(epsilon=self.epsilon)(encoded_patches)
+        representation = layers.Flatten()(representation)
+        representation = layers.Dropout(0.5)(representation)
+        features = self.multilayer_perceptron(representation, self.mlp_head_units, 0.5)
+
+        outputs1 = layers.ConvLSTM2D(self.number_classes, 3, activation="softmax", padding="same")(x)
+        outputs2 = layers.Dense(self.number_classes)(features)
+
+        outputs = layers.add([outputs1, outputs2])  # Add back residual
+        model = keras.Model(inputs=inputs, outputs=outputs)
+
+        return model
 
 
 
