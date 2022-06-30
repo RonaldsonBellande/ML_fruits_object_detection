@@ -33,8 +33,9 @@ class Patches(layers.Layer):
 
 
 class ShiftedPatchTokenization(layers.Layer):
-    def __init__(self):
+    def __init__(self, vanilla=False):
         super().__init__()
+        self.vanilla = vanilla  # Flag to swtich to vanilla patsize
         self.half_patch = self.patch_size // 2
         self.flatten_patches = layers.Reshape((self.num_patches, -1))
         self.projection = layers.Dense(units=self.projection_dim)
@@ -81,16 +82,18 @@ class ShiftedPatchTokenization(layers.Layer):
         return shift_pad
 
     def call(self, images):
-        images = tf.concat(
-            [
-                images,
-                self.crop_shift_pad(images, mode="left-up"),
-                self.crop_shift_pad(images, mode="left-down"),
-                self.crop_shift_pad(images, mode="right-up"),
-                self.crop_shift_pad(images, mode="right-down"),
-            ],
-            axis=-1,
-        )
+        if not self.vanilla:
+            # Concat the shifted images with the original image
+            images = tf.concat(
+                [
+                    images,
+                    self.crop_shift_pad(images, mode="left-up"),
+                    self.crop_shift_pad(images, mode="left-down"),
+                    self.crop_shift_pad(images, mode="right-up"),
+                    self.crop_shift_pad(images, mode="right-down"),
+                ],
+                axis=-1,
+            )
         # Patchify the images and flatten it
         patches = tf.image.extract_patches(
             images=images,
@@ -100,17 +103,68 @@ class ShiftedPatchTokenization(layers.Layer):
             padding="VALID",
         )
         flat_patches = self.flatten_patches(patches)
-        
-        # Layer normalize the flat patches and linearly project it
-        tokens = self.layer_norm(flat_patches)
-        tokens = self.projection(tokens)
-
+        if not self.vanilla:
+            # Layer normalize the flat patches and linearly project it
+            tokens = self.layer_norm(flat_patches)
+            tokens = self.projection(tokens)
+        else:
+            # Linearly project the flat patches
+            tokens = self.projection(flat_patches)
         return (tokens, patches)
 
 
-class RandomPathNoise(layers.Layer):
+class Patches(layers.Layer):
     def __init__(self, patch_size):
-        super(RandomPathNoise, self).__init__()
+        super(Patches, self).__init__()
+        self.patch_size = patch_size
+
+    def adding_random_noise(self, image, input_file):
+        
+        # Gaussian noise 
+        for i in range(self.random_noise_count):
+            gaussian_noise = np.random.normal(0, (10 **0.5), image.shape)
+            image = image + gaussian_noise
+            self.image_file.append(image)
+            self.label_name.append(input_file)
+
+
+        # Salt and pepper noise 
+        for i in range(self.random_noise_count):
+            probability = 0.02
+            for i in range(image.shape[0]):
+                for j in range(image.shape[1]):
+                    random_num = random.random()
+                    if random_num < probability:
+                        image[i][j] = 0
+                    elif random_num > (1 - probability):
+                        image[i][j] = 255
+            self.image_file.append(image)
+            self.label_name.append(input_file)
+
+
+        # Poisson noise
+        for i in range(self.random_noise_count):
+            poisson_noise = np.sqrt(image) * np.random.normal(0, 1, image.shape)
+            noisy_image = image + poisson_noise
+            self.image_file.append(image)
+            self.label_name.append(input_file)
+
+
+        # Speckle noise
+        for i in range(self.random_noise_count):
+            speckle_noise = np.random.normal(0, (10 **0.5), image.shape)
+            image = image + image * speckle_noise
+            self.image_file.append(image)
+            self.label_name.append(input_file)
+
+
+        # Uniform noise
+        for i in range(self.random_noise_count):
+            uniform_noise = np.random.uniform(0,(10 **0.5), image.shape)
+            image = image + uniform_noise
+            self.image_file.append(image)
+            self.label_name.append(input_file)
+
 
     def call(self, images):
         batch_size = tf.shape(images)[0]

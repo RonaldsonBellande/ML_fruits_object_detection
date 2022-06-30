@@ -1,6 +1,7 @@
 from header_imports import *
 
 @mark.usefixtures("class_fixture")
-class TestModels(object):
+class TestModels(computer_vision_utilities):
     @fixture(autouse=True)
-    def method_fixture(self):
+    def __init__(self):
+        self.check_valid()

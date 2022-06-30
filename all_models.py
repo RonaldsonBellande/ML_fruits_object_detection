@@ -78,6 +78,7 @@ class models(object):
         return model
 
 
+
     # VIT Transformer model 
     def vit_transformer_model(self):
 
@@ -91,9 +92,8 @@ class models(object):
             layers.RandomZoom(height_factor=0.2, width_factor=0.2),
         ])
         augmented = augmentation(inputs)
-        
-        patches = Patches(self.patch_size)(augmented)
-        encoded_patches = PatchEncoder(self.num_patches, self.projection_dim)(patches)
+        patches = Patches()(augmented)
+        encoded_patches = PatchEncoder()(patches)
 
         # Create multiple layers of the Transformer block.
         for _ in range(self.transformer_layers):
@@ -148,6 +148,20 @@ class models(object):
         model.compile(loss=keras.losses.binary_crossentropy, optimizer=keras.optimizers.Adam(),)
 
         return model
+
+
+    # Personal model
+    def personal_model():
+
+        inputs = layers.Input(shape=self.input_shape)
+
+        augmentation = keras.Sequential([
+            layers.Normalization(),
+            layers.Resizing(self.image_size, self.image_size),
+            layers.RandomFlip("horizontal"),
+            layers.RandomRotation(factor=0.02),
+            layers.RandomZoom(height_factor=0.2, width_factor=0.2),
+        ])
 
 
 
