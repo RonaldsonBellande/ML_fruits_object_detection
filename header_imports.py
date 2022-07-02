@@ -67,6 +67,9 @@ from tensorflow.keras.layers import Conv2D, Flatten, Dense, MaxPooling2D, Dropou
 from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping, TensorBoard, ModelCheckpoint
 from tensorflow.keras.utils import to_categorical
 
+# Testing
+from pytest_pipeline import PipelineRun, mark, utils
+
 warnings.filterwarnings('ignore')
 plt.style.use('ggplot')
 
@@ -99,6 +102,6 @@ from computer_vision_system.image_enviroment import *
 from computer_vision_system.computer_vision_continuous_learning import *
 
 # Testinng
-from tests.file_test import *
-from tests.paths_test import *
-from tests.model_test import *
+# from tests.file_test import *
+# from tests.paths_test import *
+# from tests.model_test import *

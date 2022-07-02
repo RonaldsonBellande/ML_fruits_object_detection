@@ -1,13 +1,13 @@
 from header_imports import *
 
-class model_building(models, computer_vision_utilities):
+class model_building(models, computer_vision_utilities, model_utilities):
     def __init__(self, config, model_type, random_noise_count):
 
+        model_utilities.__init__(self)
+        
         self.image_file = []
         self.label_name = []
         self.random_noise_count = int(random_noise_count)
-        self.image_size = 240
-        self.number_of_nodes = 16
         self.valid_images = [".jpg",".png"]
         self.model = None
         self.model_summary = "model_summary/"
@@ -17,16 +17,6 @@ class model_building(models, computer_vision_utilities):
         self.labelencoder = LabelEncoder()
         self.setup_structure()
         self.splitting_data_normalize()
-        
-        # Transformer
-        self.patch_size = 6  # Size of the patches to be extract from the input images
-        self.num_patches = (self.image_size // self.patch_size) ** 2
-        self.projection_dim = 64
-        self.num_heads = 4
-        self.transformer_units = [self.projection_dim * 2, self.projection_dim]  # Size of the transformer layers
-        self.transformer_layers = 8
-        self.mlp_head_units = [2048, 1024]
-        self.epsilon = 1e-6
 
         if self.model_type == "model1":
             self.model = self.create_models_1()
@@ -34,6 +24,8 @@ class model_building(models, computer_vision_utilities):
             self.model = self.vit_transformer_model()
         elif self.model_type == "unet_model":
             self.model = self.unet_model()
+        elif self.model_type == "personal_model":
+            self.model = self.personal_model()
 
         self.save_model_summary()
         self.display_model_archetecture()

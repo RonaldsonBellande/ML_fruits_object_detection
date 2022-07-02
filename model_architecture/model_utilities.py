@@ -1,21 +1,27 @@
 from header_imports import *
 
 
-class PatchEncoder(layers.Layer):
-    def __init__(self):
-        super(PatchEncoder, self).__init__()
-        self.projection = layers.Dense(units=self.projection_dim)
-        self.position_embedding = layers.Embedding(input_dim=self.num_patches, output_dim=self.projection_dim)
+class model_utilities(object):
+    def __init__(self):    
+        
+        self.image_size = 240
+        self.number_of_nodes = 16
+        
+        # Transformer
+        self.patch_size = 6  # Size of the patches to be extract from the input images
+        self.num_patches = (self.image_size // self.patch_size) ** 2
+        self.projection_dim = 64
+        self.num_heads = 4
+        self.transformer_units = [self.projection_dim * 2, self.projection_dim]  # Size of the transformer layers
+        self.transformer_layers = 8
+        self.mlp_head_units = [2048, 1024]
+        self.epsilon = 1e-6
 
-    def call(self, patch):
-        positions = tf.range(start=0, limit=self.num_patches, delta=1)
-        encoded = self.projection(patch) + self.position_embedding(positions)
-        return encoded
 
-
-class Patches(layers.Layer):
+class Patches(layers.Layer, model_utilities):
     def __init__(self):
         super(Patches, self).__init__()
+        model_utilities.__init__(self)
 
     def call(self, images):
         batch_size = tf.shape(images)[0]
@@ -31,9 +37,25 @@ class Patches(layers.Layer):
         return patches
 
 
-class ShiftedPatchTokenization(layers.Layer):
+class PatchEncoder(layers.Layer, model_utilities):
+    def __init__(self):
+        super(PatchEncoder, self).__init__()
+        model_utilities.__init__(self)
+        
+        self.projection = layers.Dense(units=self.projection_dim)
+        self.position_embedding = layers.Embedding(input_dim=self.num_patches, output_dim=self.projection_dim)
+
+    def call(self, patch):
+        positions = tf.range(start=0, limit=self.num_patches, delta=1)
+        encoded = self.projection(patch) + self.position_embedding(positions)
+        return encoded
+
+
+class ShiftedPatchTokenization(layers.Layer, model_utilities):
     def __init__(self):
         super(ShiftedPatchTokenization, self).__init__()
+        model_utilities.__init__(self)
+        
         self.half_patch = self.patch_size // 2
         self.flatten_patches = layers.Reshape((self.num_patches, -1))
         self.projection = layers.Dense(units=self.projection_dim)
@@ -108,9 +130,10 @@ class ShiftedPatchTokenization(layers.Layer):
 
 
 class RandomPatchNoise(layers.Layer):
-    def __init__(self, patch_size):
+    def __init__(self):
         super(RandomPatchNoise, self).__init__()
-
+        model_utilities.__init__(self)
+    
     def adding_random_noise(self, image, noise_type):
       
         if noise_type == "Gaussian":

@@ -2,7 +2,7 @@ from header_imports import *
 
 if __name__ == "__main__":
    
-    with open("config/system_config.json") as (file):
+    with open("config/system_conf.json") as (file):
         system_config = json.load(file)
 
     if len(sys.argv) != 1:

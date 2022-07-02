@@ -1,6 +1,6 @@
 from header_imports import *
 
-class computer_vision_utilities(object):
+class computer_vision_utilities(model_utilities):
     def setup_structure(self):
         
         self.path  = "fruits_360_datasets/"
@@ -33,7 +33,6 @@ class computer_vision_utilities(object):
             image_resized = cv2.resize(image_resized,(self.image_size, self.image_size), interpolation = cv2.INTER_AREA)
             self.image_file.append(image_resized)
             self.label_name.append(input_file)
-            # self.adding_random_noise(image_resized, input_file)
 
 
     def splitting_data_normalize(self):
