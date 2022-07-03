@@ -398,15 +398,50 @@ ________________________________________________________________________________
                                                                                                   
  dropout_18 (Dropout)           (None, 1024)         0           ['dense_18[0][0]']               
                                                                                                   
- conv2d_8 (Conv2D)              (None, 240, 240, 4)  1156        ['add_22[0][0]']                 
+ conv2d_8 (Conv2D)              (None, 240, 240, 8)  2312        ['add_22[0][0]']                 
                                                                                                   
- dense_19 (Dense)               (None, 4)            4100        ['dropout_18[0][0]']             
+ dense_19 (Dense)               (None, 8)            8200        ['dropout_18[0][0]']             
                                                                                                   
- add_23 (Add)                   (None, 240, 240, 4)  0           ['conv2d_8[0][0]',               
+ add_23 (Add)                   (None, 240, 240, 8)  0           ['conv2d_8[0][0]',               
                                                                   'dense_19[0][0]']               
                                                                                                   
+ activation_15 (Activation)     (None, 240, 240, 8)  0           ['add_23[0][0]']                 
+                                                                                                  
+ activation_16 (Activation)     (None, 240, 240, 8)  0           ['activation_15[0][0]']          
+                                                                                                  
+ conv2d_transpose_8 (Conv2DTran  (None, 240, 240, 8)  584        ['activation_16[0][0]']          
+ spose)                                                                                           
+                                                                                                  
+ batch_normalization_15 (BatchN  (None, 240, 240, 8)  32         ['conv2d_transpose_8[0][0]']     
+ ormalization)                                                                                    
+                                                                                                  
+ activation_17 (Activation)     (None, 240, 240, 8)  0           ['batch_normalization_15[0][0]'] 
+                                                                                                  
+ conv2d_transpose_9 (Conv2DTran  (None, 240, 240, 8)  584        ['activation_17[0][0]']          
+ spose)                                                                                           
+                                                                                                  
+ batch_normalization_16 (BatchN  (None, 240, 240, 8)  32         ['conv2d_transpose_9[0][0]']     
+ ormalization)                                                                                    
+                                                                                                  
+ up_sampling2d_9 (UpSampling2D)  (None, 480, 480, 32  0          ['add_22[0][0]']                 
+                                )                                                                 
+                                                                                                  
+ up_sampling2d_8 (UpSampling2D)  (None, 480, 480, 8)  0          ['batch_normalization_16[0][0]'] 
+                                                                                                  
+ conv2d_9 (Conv2D)              (None, 480, 480, 8)  264         ['up_sampling2d_9[0][0]']        
+                                                                                                  
+ add_24 (Add)                   (None, 480, 480, 8)  0           ['up_sampling2d_8[0][0]',        
+                                                                  'conv2d_9[0][0]']               
+                                                                                                  
+ conv2d_10 (Conv2D)             (None, 480, 480, 4)  292         ['add_24[0][0]']                 
+                                                                                                  
+ dense_20 (Dense)               (None, 480, 480, 4)  20          ['conv2d_10[0][0]']              
+                                                                                                  
+ add_25 (Add)                   (None, 480, 480, 4)  0           ['conv2d_10[0][0]',              
+                                                                  'dense_20[0][0]']               
+                                                                                                  
 ==================================================================================================
-Total params: 214,653,903
-Trainable params: 214,650,120
-Non-trainable params: 3,783
+Total params: 214,660,967
+Trainable params: 214,657,152
+Non-trainable params: 3,815
 __________________________________________________________________________________________________

@@ -180,8 +180,7 @@ class models(object):
             x3 = self.multilayer_perceptron(x3, self.transformer_units, 0.1)
             encoded_patches = layers.Add()([x3, x2])
 
-
-        ### [First half of the network: downsampling inputs] ###
+        ### [First half of the network: downsampling inputs]
         x = layers.Conv2D(32, 3, strides=2, padding="same", activation="relu")(augmented)
         x = layers.BatchNormalization()(x)
         x = layers.Activation("relu")(x)
@@ -223,18 +222,39 @@ class models(object):
             x = layers.add([x, residual])  # Add back residual
             previous_block_activation = x
 
-
         # Create a [batch_size, projection_dim] tensor.
         representation = layers.LayerNormalization(epsilon=self.epsilon)(encoded_patches)
         representation = layers.Flatten()(representation)
         representation = layers.Dropout(0.5)(representation)
         features = self.multilayer_perceptron(representation, self.mlp_head_units, 0.5)
 
-        outputs1 = layers.Conv2D(self.number_classes, 3, activation="softmax", padding="same")(x)
-        outputs2 = layers.Dense(self.number_classes)(features)
+        for filters in [int(self.number_classes * 2)]:
+            x = layers.Conv2D(filters, 3, activation="softmax", padding="same")(x)
+            x2 = layers.Dense(filters)(features)
+            x = layers.add([x, x2])  # Add back residual
 
-        outputs = layers.add([outputs1, outputs2])  # Add back residual
+            x = layers.Activation("relu")(x)
+            x = layers.Activation("relu")(x)
+            x = layers.Conv2DTranspose(filters, 3, padding="same")(x)
+            x = layers.BatchNormalization()(x)
+
+            x = layers.Activation("relu")(x)
+            x = layers.Conv2DTranspose(filters, 3, padding="same")(x)
+            x = layers.BatchNormalization()(x)
+
+            x = layers.UpSampling2D(2)(x)
+
+            # Project residual
+            residual = layers.UpSampling2D(2)(previous_block_activation)
+            residual = layers.Conv2D(filters, 1, padding="same", activation="relu")(residual)
+            x = layers.add([x, residual])  # Add back residual
+
+        x = layers.Conv2D(self.number_classes, 3, activation="softmax", padding="same")(x)
+        x2 = layers.Dense(self.number_classes)(x)
+        outputs = layers.add([x, x2])  # Add back residual
+        
         model = keras.Model(inputs=inputs, outputs=outputs)
+        model.compile(loss=keras.losses.binary_crossentropy, optimizer=keras.optimizers.Adam(),)
 
         return model
 
