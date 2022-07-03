@@ -17,6 +17,8 @@ class model_utilities(object):
         self.mlp_head_units = [2048, 1024]
         self.epsilon = 1e-6
 
+        self.diag_attn_mask = tf.cast([(1-tf.eye(self.num_patches))], dtype=tf.int8)
+
 
 class Patches(layers.Layer, model_utilities):
     def __init__(self):
@@ -51,6 +53,24 @@ class PatchEncoder(layers.Layer, model_utilities):
         return encoded
 
 
+class MultiHeadAttentionLSA(tf.keras.layers.MultiHeadAttention, model_utilities):
+    def __init__(self):
+        super(MultiHeadAttentionLSA, self).__init__()
+        model_utilities.__init__(self)
+
+        self.tau = tf.Variable(math.sqrt(float(self._key_dim)), trainable=True)
+
+    def _compute_attention(self, query, key, value, attention_mask=None, training=None):
+        query = tf.multiply(query, 1.0 / self.tau)
+        attention_scores = tf.einsum(self._dot_product_equation, key, query)
+        attention_scores = self._masked_softmax(attention_scores, attention_mask)
+        attention_scores_dropout = self._dropout_layer(attention_scores, training=training)
+        attention_output = tf.einsum(self._combine_equation, attention_scores_dropout, value)
+
+        return attention_output, attention_scores
+
+
+
 class ShiftedPatchTokenization(layers.Layer, model_utilities):
     def __init__(self):
         super(ShiftedPatchTokenization, self).__init__()
@@ -63,7 +83,12 @@ class ShiftedPatchTokenization(layers.Layer, model_utilities):
 
     def crop_shift_pad(self, images, shift):
         # Build the diagonally shifted images
-        if shift == "left-up":
+        if shift == "normal":
+            crop_height = 0
+            crop_width = 0
+            shift_height = 0
+            shift_width = 0
+        elif shift == "left-up":
             crop_height = self.half_patch
             crop_width = self.half_patch
             shift_height = 0
@@ -104,7 +129,7 @@ class ShiftedPatchTokenization(layers.Layer, model_utilities):
     def call(self, images):
         images = tf.concat(
             [
-                images,
+                self.crop_shift_pad(images, shift="normal"),
                 self.crop_shift_pad(images, shift="left-up"),
                 self.crop_shift_pad(images, shift="left-down"),
                 self.crop_shift_pad(images, shift="right-up"),
@@ -129,7 +154,7 @@ class ShiftedPatchTokenization(layers.Layer, model_utilities):
         return (tokens, patches)
 
 
-class RandomPatchNoise(layers.Layer):
+class RandomPatchNoise(layers.Layer, model_utilities):
     def __init__(self):
         super(RandomPatchNoise, self).__init__()
         model_utilities.__init__(self)

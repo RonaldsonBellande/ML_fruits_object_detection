@@ -167,18 +167,18 @@ class models(object):
         augmented = augmentation(inputs)
         patches = Patches()(augmented)
         encoded_patches = PatchEncoder()(patches)
-        # shift_patches = ShiftedPatchTokenization()(encoded_patches)
-        # noise_patches = RandomPatchNoise()(shift_patches) 
+        (shift_patches, _) = ShiftedPatchTokenization()(encoded_patches)
+        # noise_patches = RandomPatchNoise()(shift_patches)
 
 
         # Create multiple layers of the Transformer block.
         for _ in range(self.transformer_layers):
-            x1 = layers.LayerNormalization(epsilon=self.epsilon)(encoded_patches)
-            attention_output = layers.MultiHeadAttention(num_heads=self.num_heads, key_dim=self.projection_dim, dropout=0.1)(x1, x1)
-            x2 = layers.Add()([attention_output, encoded_patches])
+            x1 = layers.LayerNormalization(epsilon=self.epsilon)(shift_patches)
+            attention_output = MultiHeadAttentionLSA(num_heads=self.num_heads, key_dim=self.projection_dim, dropout=0.1)(x1, x1, attention_mask=diag_attn_mask)
+            x2 = layers.Add()([attention_output, shift_patches])
             x3 = layers.LayerNormalization(epsilon=self.epsilon)(x2)
             x3 = self.multilayer_perceptron(x3, self.transformer_units, 0.1)
-            encoded_patches = layers.Add()([x3, x2])
+            shift_patches = layers.Add()([x3, x2])
 
         ### [First half of the network: downsampling inputs]
         x = layers.Conv2D(32, 3, strides=2, padding="same", activation="relu")(augmented)
@@ -223,7 +223,7 @@ class models(object):
             previous_block_activation = x
 
         # Create a [batch_size, projection_dim] tensor.
-        representation = layers.LayerNormalization(epsilon=self.epsilon)(encoded_patches)
+        representation = layers.LayerNormalization(epsilon=self.epsilon)(shift_patches)
         representation = layers.Flatten()(representation)
         representation = layers.Dropout(0.5)(representation)
         features = self.multilayer_perceptron(representation, self.mlp_head_units, 0.5)
