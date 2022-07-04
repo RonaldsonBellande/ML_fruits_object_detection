@@ -16,6 +16,16 @@ class model_utilities(object):
         self.transformer_layers = 8
         self.mlp_head_units = [2048, 1024]
         self.epsilon = 1e-6
+        
+        self.augmentation = keras.Sequential([
+            # layers.Normalization(),
+            layers.Resizing(self.image_size, self.image_size),
+            layers.RandomFlip("horizontal"),
+            layers.RandomRotation(factor=0.02),
+            layers.RandomZoom(height_factor=0.2, width_factor=0.2),
+        ])
+
+        # self.augmentation.layers[0].adapt(x_train)
 
         self.diag_attn_mask = tf.cast([(1-tf.eye(self.num_patches))], dtype=tf.int8)
 

@@ -21,14 +21,7 @@ class models(object):
     def unet_model(self):
         inputs = keras.Input(shape=self.input_shape)
 
-        augmentation = keras.Sequential([
-            layers.Normalization(),
-            layers.Resizing(self.image_size, self.image_size),
-            layers.RandomFlip("horizontal"),
-            layers.RandomRotation(factor=0.02),
-            layers.RandomZoom(height_factor=0.2, width_factor=0.2),
-        ])
-        augmented = augmentation(inputs)
+        augmented = self.augmentation(inputs)
 
         ### [First half of the network: downsampling inputs] ###
         x = layers.Conv2D(32, 3, strides=2, padding="same")(augmented)
@@ -84,14 +77,7 @@ class models(object):
 
         inputs = layers.Input(shape=self.input_shape)
 
-        augmentation = keras.Sequential([
-            layers.Normalization(),
-            layers.Resizing(self.image_size, self.image_size),
-            layers.RandomFlip("horizontal"),
-            layers.RandomRotation(factor=0.02),
-            layers.RandomZoom(height_factor=0.2, width_factor=0.2),
-        ])
-        augmented = augmentation(inputs)
+        augmented = self.augmentation(inputs)
         patches = Patches()(augmented)
         encoded_patches = PatchEncoder()(patches)
         shift_patches = ShiftedPatchTokenization()(encoded_patches)
@@ -130,14 +116,7 @@ class models(object):
 
         input = layers.Input(shape=self.input_shape)
         
-        augmentation = keras.Sequential([
-            layers.Normalization(),
-            layers.Resizing(self.image_size, self.image_size),
-            layers.RandomFlip("horizontal"),
-            layers.RandomRotation(factor=0.02),
-            layers.RandomZoom(height_factor=0.2, width_factor=0.2),
-        ])
-        augmented = augmentation(inputs)
+        augmented = self.augmentation(inputs)
 
         x = layers.ConvLSTM2D(filters=64, kernel_size=(5, 5), padding="same", return_sequences=True, activation="relu",)(augmented)
         x = layers.BatchNormalization()(x)
@@ -157,14 +136,7 @@ class models(object):
 
         inputs = layers.Input(shape=self.input_shape)
 
-        augmentation = keras.Sequential([
-            layers.Normalization(),
-            layers.Resizing(self.image_size, self.image_size),
-            layers.RandomFlip("horizontal"),
-            layers.RandomRotation(factor=0.02),
-            layers.RandomZoom(height_factor=0.2, width_factor=0.2),
-        ])
-        augmented = augmentation(inputs)
+        augmented = self.augmentation(inputs)
         patches = Patches()(augmented)
         encoded_patches = PatchEncoder()(patches)
         (shift_patches, _) = ShiftedPatchTokenization()(encoded_patches)
