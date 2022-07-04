@@ -29,8 +29,8 @@ class model_utilities(object):
 
 
 class Patches(layers.Layer, model_utilities):
-    def __init__(self):
-        super(Patches, self).__init__()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         model_utilities.__init__(self)
 
     def call(self, images):
@@ -48,8 +48,8 @@ class Patches(layers.Layer, model_utilities):
 
 
 class PatchEncoder(layers.Layer, model_utilities):
-    def __init__(self):
-        super(PatchEncoder, self).__init__()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         model_utilities.__init__(self)
         
         self.projection = layers.Dense(units=self.projection_dim)
@@ -69,7 +69,7 @@ class MultiHeadAttentionLSA(layers.MultiHeadAttention, model_utilities):
         self.tau = tf.Variable(math.sqrt(float(self._key_dim)), trainable=True)
 
     def _compute_attention(self, query, key, value, attention_mask=None, training=None):
-        query = tf.multiply(query, 1.0 / self.tau)
+        query = tf.multiply(query, 1.0 / self.tau, dtype=float16)
         attention_scores = tf.einsum(self._dot_product_equation, key, query)
         attention_scores = self._masked_softmax(attention_scores, attention_mask)
         attention_scores_dropout = self._dropout_layer(attention_scores, training=training)
@@ -80,8 +80,8 @@ class MultiHeadAttentionLSA(layers.MultiHeadAttention, model_utilities):
 
 
 class ShiftedPatchTokenization(layers.Layer, model_utilities):
-    def __init__(self):
-        super(ShiftedPatchTokenization, self).__init__()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         model_utilities.__init__(self)
         
         self.half_patch = self.patch_size // 2
@@ -166,8 +166,8 @@ class ShiftedPatchTokenization(layers.Layer, model_utilities):
 
 
 class RandomPatchNoise(layers.Layer, model_utilities):
-    def __init__(self):
-        super(RandomPatchNoise, self).__init__()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         model_utilities.__init__(self)
     
     def adding_random_noise(self, image, noise_type):
