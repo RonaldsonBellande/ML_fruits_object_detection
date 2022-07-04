@@ -146,7 +146,7 @@ class models(object):
         # Create multiple layers of the Transformer block.
         for _ in range(self.transformer_layers):
             x1 = layers.LayerNormalization(epsilon=self.epsilon)(shift_patches)
-            attention_output = MultiHeadAttentionLSA(num_heads=self.num_heads, key_dim=self.projection_dim, dropout=0.1)(x1, x1, attention_mask=diag_attn_mask)
+            attention_output = MultiHeadAttentionLSA(num_heads=self.num_heads, key_dim=self.projection_dim, dropout=0.1)(x1, x1, attention_mask=self.diag_attn_mask)
             x2 = layers.Add()([attention_output, shift_patches])
             x3 = layers.LayerNormalization(epsilon=self.epsilon)(x2)
             x3 = self.multilayer_perceptron(x3, self.transformer_units, 0.1)

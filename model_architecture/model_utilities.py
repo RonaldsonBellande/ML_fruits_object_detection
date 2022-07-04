@@ -18,14 +18,12 @@ class model_utilities(object):
         self.epsilon = 1e-6
         
         self.augmentation = keras.Sequential([
-            # layers.Normalization(),
+            layers.Normalization(),
             layers.Resizing(self.image_size, self.image_size),
             layers.RandomFlip("horizontal"),
             layers.RandomRotation(factor=0.02),
             layers.RandomZoom(height_factor=0.2, width_factor=0.2),
         ])
-
-        # self.augmentation.layers[0].adapt(x_train)
 
         self.diag_attn_mask = tf.cast([(1-tf.eye(self.num_patches))], dtype=tf.int8)
 
@@ -63,9 +61,9 @@ class PatchEncoder(layers.Layer, model_utilities):
         return encoded
 
 
-class MultiHeadAttentionLSA(tf.keras.layers.MultiHeadAttention, model_utilities):
-    def __init__(self):
-        super(MultiHeadAttentionLSA, self).__init__()
+class MultiHeadAttentionLSA(layers.MultiHeadAttention, model_utilities):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         model_utilities.__init__(self)
 
         self.tau = tf.Variable(math.sqrt(float(self._key_dim)), trainable=True)
@@ -134,6 +132,8 @@ class ShiftedPatchTokenization(layers.Layer, model_utilities):
             target_height=self.image_size,
             target_width=self.image_size,
         )
+
+        shift_pad = tf.expand_dims(shift_pad, 0)
         return shift_pad
 
     def call(self, images):
@@ -155,6 +155,7 @@ class ShiftedPatchTokenization(layers.Layer, model_utilities):
             rates=[1, 1, 1, 1],
             padding="VALID",
         )
+
         flat_patches = self.flatten_patches(patches)
         
         # Layer normalize the flat patches and linearly project it
@@ -211,6 +212,24 @@ class RandomPatchNoise(layers.Layer, model_utilities):
                 uniform_noise = np.random.uniform(0,(10 **0.5), image.shape)
                 image = image + uniform_noise
                 self.image_file.append(image)
+
+        # Crop the shifted images and pad them
+        crop = tf.image.crop_to_bounding_box(
+            images,
+            offset_height=crop_height,
+            offset_width=crop_width,
+            target_height=self.image_size - self.half_patch,
+            target_width=self.image_size - self.half_patch,
+        )
+        shift_pad = tf.image.pad_to_bounding_box(
+            crop,
+            offset_height=shift_height,
+            offset_width=shift_width,
+            target_height=self.image_size,
+            target_width=self.image_size,
+        )
+
+        shift_pad = tf.expand_dims(shift_pad, 0)
 
 
     def call(self, images):
