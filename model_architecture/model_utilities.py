@@ -26,6 +26,7 @@ class model_utilities(object):
         ])
 
         self.diag_attn_mask = tf.cast([(1-tf.eye(self.num_patches))], dtype=tf.int8)
+        self.random_noise_count = 1
 
 
 class Patches(layers.Layer, model_utilities):
@@ -66,10 +67,10 @@ class MultiHeadAttentionLSA(layers.MultiHeadAttention, model_utilities):
         super().__init__(**kwargs)
         model_utilities.__init__(self)
 
-        self.tau = tf.Variable(math.sqrt(float(self._key_dim)), trainable=True)
+        self.tau = tf.cast(tf.Variable(math.sqrt(float(self._key_dim)), trainable=True), tf.float16)
 
     def _compute_attention(self, query, key, value, attention_mask=None, training=None):
-        query = tf.multiply(query, 1.0 / self.tau, dtype=float16)
+        query = tf.multiply(query, 1 / self.tau)
         attention_scores = tf.einsum(self._dot_product_equation, key, query)
         attention_scores = self._masked_softmax(attention_scores, attention_mask)
         attention_scores_dropout = self._dropout_layer(attention_scores, training=training)
@@ -165,19 +166,25 @@ class ShiftedPatchTokenization(layers.Layer, model_utilities):
         return (tokens, patches)
 
 
+
 class RandomPatchNoise(layers.Layer, model_utilities):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         model_utilities.__init__(self)
+
+        self.half_patch = self.patch_size // 2
     
     def adding_random_noise(self, image, noise_type):
-      
-        if noise_type == "Gaussian":
+     
+        images = image
+        if noise_type == "Normal":
+            images = image
+
+        elif noise_type == "Gaussian":
             # Gaussian noise
             for i in range(self.random_noise_count):
                 gaussian_noise = np.random.normal(0, (10 **0.5), image.shape)
-                image = image + gaussian_noise
-                self.image_file.append(image)
+                images = image + gaussian_noise
 
         elif noise_type == "SaltPepper":
             # Salt and pepper noise
@@ -187,58 +194,39 @@ class RandomPatchNoise(layers.Layer, model_utilities):
                     for j in range(image.shape[1]):
                         random_num = random.random()
                         if random_num < probability:
-                            image[i][j] = 0
+                            images[i][j] = 0
                         elif random_num > (1 - probability):
-                            image[i][j] = 255
-                self.image_file.append(image)
+                            images[i][j] = 255
 
         elif noise_type == "Poisson":
             # Poisson noise
             for i in range(self.random_noise_count):
                 poisson_noise = np.sqrt(image) * np.random.normal(0, 1, image.shape)
-                noisy_image = image + poisson_noise
-                self.image_file.append(image)
+                images = image + poisson_noise
 
         elif noise_type == "Speckle":
             # Speckle noise
             for i in range(self.random_noise_count):
                 speckle_noise = np.random.normal(0, (10 **0.5), image.shape)
-                image = image + image * speckle_noise
-                self.image_file.append(image)
+                images = image + image * speckle_noise
 
         elif noise_type == "Uniform":
             # Uniform noise
             for i in range(self.random_noise_count):
                 uniform_noise = np.random.uniform(0,(10 **0.5), image.shape)
-                image = image + uniform_noise
-                self.image_file.append(image)
+                images = image + uniform_noise
 
-        # Crop the shifted images and pad them
-        crop = tf.image.crop_to_bounding_box(
-            images,
-            offset_height=crop_height,
-            offset_width=crop_width,
-            target_height=self.image_size - self.half_patch,
-            target_width=self.image_size - self.half_patch,
-        )
-        shift_pad = tf.image.pad_to_bounding_box(
-            crop,
-            offset_height=shift_height,
-            offset_width=shift_width,
-            target_height=self.image_size,
-            target_width=self.image_size,
-        )
 
-        shift_pad = tf.expand_dims(shift_pad, 0)
-
+        random_img = tf.expand_dims(images, 0)
+        return random_img
 
     def call(self, images):
         images = tf.concat(
             [
-                images,
+                self.adding_random_noise(images, noise_type="normal"),
                 self.adding_random_noise(images, noise_type="Gaussian"),
-                self.adding_random_noise(images, noise_type="SaltPepper"),
-                self.adding_random_noise(images, noise_type="Poisson"),
+                # self.adding_random_noise(images, noise_type="SaltPepper"),
+                # self.adding_random_noise(images, noise_type="Poisson"),
                 self.adding_random_noise(images, noise_type="Speckle"),
                 self.adding_random_noise(images, noise_type="Uniform"),
             ],
@@ -252,7 +240,7 @@ class RandomPatchNoise(layers.Layer, model_utilities):
             rates=[1, 1, 1, 1],
             padding="VALID",
         )
-        flat_patches = self.flatten_patches(patches)
+        flat_patches = keras.layers.Flatten(data_format=patches)
        
         # Layer normalize the flat patches and linearly project it
         tokens = self.layer_norm(flat_patches)

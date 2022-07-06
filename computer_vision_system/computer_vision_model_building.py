@@ -5,12 +5,13 @@ class model_building(models, computer_vision_utilities, model_utilities):
 
         model_utilities.__init__(self)
         
+        self.config = config
         self.image_file = []
         self.label_name = []
         self.random_noise_count = int(random_noise_count)
         self.valid_images = [".jpg",".png"]
         self.model = None
-        self.model_summary = "model_summary/"
+        self.model_summary = self.config["building"]["model_summary"]
         self.optimizer = keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999)
         self.model_type = model_type
         

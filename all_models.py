@@ -131,6 +131,7 @@ class models(object):
         return model
 
 
+
     # Personal model
     def personal_model(self):
 
@@ -140,7 +141,7 @@ class models(object):
         patches = Patches()(augmented)
         encoded_patches = PatchEncoder()(patches)
         (shift_patches, _) = ShiftedPatchTokenization()(encoded_patches)
-        # noise_patches = RandomPatchNoise()(shift_patches)
+        (noise_patches, _) = RandomPatchNoise()(shift_patches)
 
 
         # Create multiple layers of the Transformer block.
@@ -153,7 +154,7 @@ class models(object):
             encoded_patches = layers.Add()([x3, x2])
 
         ### [First half of the network: downsampling inputs]
-        x = layers.Conv2D(32, 3, strides=2, padding="same", activation="relu")(augmented)
+        x = layers.Conv2D(32, 3, strides=2, padding="same", activation="relu")(noise_patches)
         x = layers.BatchNormalization()(x)
         x = layers.Activation("relu")(x)
 
@@ -195,7 +196,7 @@ class models(object):
             previous_block_activation = x
 
         # Create a [batch_size, projection_dim] tensor.
-        representation = layers.LayerNormalization(epsilon=self.epsilon)(shift_patches)
+        representation = layers.LayerNormalization(epsilon=self.epsilon)(noise_patches)
         representation = layers.Flatten()(representation)
         representation = layers.Dropout(0.5)(representation)
         features = self.multilayer_perceptron(representation, self.mlp_head_units, 0.5)
