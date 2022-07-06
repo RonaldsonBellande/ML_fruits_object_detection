@@ -167,54 +167,55 @@ class ShiftedPatchTokenization(layers.Layer, model_utilities):
 
 
 
-class RandomPatchNoise(layers.Layer, model_utilities):
+class RandomPatchNoise(ShiftedPatchTokenization, layers.Layer, model_utilities):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         model_utilities.__init__(self)
 
         self.half_patch = self.patch_size // 2
     
-    def adding_random_noise(self, image, noise_type):
+    def adding_random_noise(self, images, noise_type):
      
-        images = image
         if noise_type == "Normal":
-            images = image
+            images = images
 
         elif noise_type == "Gaussian":
             # Gaussian noise
-            for i in range(self.random_noise_count):
-                gaussian_noise = np.random.normal(0, (10 **0.5), image.shape)
-                images = image + gaussian_noise
+            for _ in range(self.random_noise_count):
+                gaussian_noise = np.random.normal(0, (10 **0.5), images.shape)
+                images = images + gaussian_noise
 
         elif noise_type == "SaltPepper":
             # Salt and pepper noise
+            images = images.numpy()
             for i in range(self.random_noise_count):
                 probability = 0.02
-                for i in range(image.shape[0]):
-                    for j in range(image.shape[1]):
-                        random_num = random.random()
-                        if random_num < probability:
-                            images[i][j] = 0
-                        elif random_num > (1 - probability):
-                            images[i][j] = 255
+                for ii in range((240**2)):
+                    random_num = random.random()
+                    if random_num < probability:
+                        images[random.randint(0, images.shape[0])][random.randint(0, images.shape[1])][random.randint(0, images.shape[2])] = 0
+                    elif random_num > (1 - probability):
+                        images[random.randint(0, images.shape[0])][random.randint(0, images.shape[1])][random.randint(0, images.shape[2])] = 255
+
+            images = tf.convert_to_tensor(images)
 
         elif noise_type == "Poisson":
             # Poisson noise
-            for i in range(self.random_noise_count):
-                poisson_noise = np.sqrt(image) * np.random.normal(0, 1, image.shape)
-                images = image + poisson_noise
+            for _ in range(self.random_noise_count):
+                poisson_noise = images * np.random.normal(0, 1, images.shape)
+                images = images + poisson_noise
 
         elif noise_type == "Speckle":
             # Speckle noise
-            for i in range(self.random_noise_count):
-                speckle_noise = np.random.normal(0, (10 **0.5), image.shape)
-                images = image + image * speckle_noise
+            for _ in range(self.random_noise_count):
+                speckle_noise = np.random.normal(0, (10 **0.5), images.shape)
+                images = images + images * speckle_noise
 
         elif noise_type == "Uniform":
             # Uniform noise
-            for i in range(self.random_noise_count):
-                uniform_noise = np.random.uniform(0,(10 **0.5), image.shape)
-                images = image + uniform_noise
+            for _ in range(self.random_noise_count):
+                uniform_noise = np.random.uniform(0,(10 **0.5), images.shape)
+                images = images + uniform_noise
 
 
         random_img = tf.expand_dims(images, 0)
@@ -226,7 +227,7 @@ class RandomPatchNoise(layers.Layer, model_utilities):
                 self.adding_random_noise(images, noise_type="normal"),
                 self.adding_random_noise(images, noise_type="Gaussian"),
                 # self.adding_random_noise(images, noise_type="SaltPepper"),
-                # self.adding_random_noise(images, noise_type="Poisson"),
+                self.adding_random_noise(images, noise_type="Poisson"),
                 self.adding_random_noise(images, noise_type="Speckle"),
                 self.adding_random_noise(images, noise_type="Uniform"),
             ],
@@ -240,7 +241,7 @@ class RandomPatchNoise(layers.Layer, model_utilities):
             rates=[1, 1, 1, 1],
             padding="VALID",
         )
-        flat_patches = keras.layers.Flatten(data_format=patches)
+        flat_patches = self.flatten_patches(patches)
        
         # Layer normalize the flat patches and linearly project it
         tokens = self.layer_norm(flat_patches)
