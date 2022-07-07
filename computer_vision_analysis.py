@@ -8,19 +8,22 @@ if __name__ == "__main__":
     if len(sys.argv) != 1:
 
         if sys.argv[2] == "model1":
-            input_model =  system_config["dataset_1_model1"]
-        elif sys.argv[2] == "vit_transformer_model":
-            input_model = system_config["dataset_1_model1"]
+            input_model = system_config["dataset"]["dataset_1_model1"]
+        elif sys.argv[2] == "vit_transformer_shift_model":
+            input_model = system_config["dataset"]["dataset_1_model1"]
+        elif sys.argv[2] == "vit_transformer_shift_noise_model":
+            input_model = system_config["dataset"]["dataset_1_model1"]
         elif sys.argv[2] == "unet_model":
-            input_model = system_config["dataset_1_model1"]
-        
+            input_model = system_config["dataset"]["dataset_1_model1"]
+        elif sys.argv[2] == "personal_model":
+            input_model = system_config["dataset"]["dataset_1_model1"]
+       
 
         if sys.argv[1] == "model_building":
-            brain_analysis_obj = model_building(config=system_config, model_type=sys.argv[2], random_noise_count=sys.argv[3])
+            computer_vision_analysis_obj = model_building(config=system_config, model_type=sys.argv[2], random_noise_count=sys.argv[3])
 
         if sys.argv[1] == "model_training":
-            brain_analysis_obj = model_training(config=system_config, model_type=sys.argv[2], random_noise_count=sys.argv[3])
-
+            computer_vision_analysis_obj = model_training(config=system_config, model_type=sys.argv[2], random_noise_count=sys.argv[3])
 
         if sys.argv[1] == "classification":
             computer_vision_analysis_obj = classification_with_model(config=system_config, saved_model=input_model)

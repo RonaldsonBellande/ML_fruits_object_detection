@@ -44,8 +44,6 @@ class computer_vision_utilities(model_utilities):
         self.X_test = self.X_test.astype("float32") /255
 
 
-
-
 class utilities(object):
     def __init__(self, name_of_new_directory = "brain_cancer_seperate/"):
         self.path = "/Data2"

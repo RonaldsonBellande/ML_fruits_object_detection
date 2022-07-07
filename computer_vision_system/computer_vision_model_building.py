@@ -21,14 +21,16 @@ class model_building(models, computer_vision_utilities, model_utilities):
 
         if self.model_type == "model1":
             self.model = self.create_models_1()
-        elif self.model_type == "vit_transformer_model":
-            self.model = self.vit_transformer_model()
+        elif self.model_type == "vit_transformer_shift_model":
+            self.model = self.vit_transformer_shift_model()
+        elif self.model_type == "vit_transformer_shift_noise_model":
+            self.model = self.vit_transformer_shift_noise_model()
         elif self.model_type == "unet_model":
             self.model = self.unet_model()
         elif self.model_type == "personal_model":
             self.model = self.personal_model()
 
-        # self.save_model_summary()
+        self.save_model_summary()
         self.display_model_archetecture()
 
 
