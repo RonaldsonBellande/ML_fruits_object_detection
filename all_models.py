@@ -66,6 +66,7 @@ class models(object):
 
         outputs = layers.Conv2D(self.number_classes, 3, activation="softmax", padding="same")(x)
         model = keras.Model(inputs=inputs, outputs=outputs)
+        model.compile(loss=keras.losses.binary_crossentropy, optimizer=keras.optimizers.Adam(),)
         
         return model
 
@@ -97,6 +98,7 @@ class models(object):
         features = self.multilayer_perceptron(representation, self.mlp_head_units, 0.5)
         outputs = layers.Dense(self.number_classes)(features)
         model = keras.Model(inputs=inputs, outputs=outputs)
+        model.compile(loss=keras.losses.binary_crossentropy, optimizer=keras.optimizers.Adam(),)
 
         return model
 
@@ -128,7 +130,8 @@ class models(object):
         features = self.multilayer_perceptron(representation, self.mlp_head_units, 0.5)
         outputs = layers.Dense(self.number_classes)(features)
         model = keras.Model(inputs=inputs, outputs=outputs)
-
+        model.compile(loss=keras.losses.binary_crossentropy, optimizer=keras.optimizers.Adam(),)
+        
         return model
 
 
@@ -185,7 +188,7 @@ class models(object):
             noise_patches = layers.Add()([x3, x2])
 
         ### [First half of the network: downsampling inputs]
-        x = layers.Conv2D(32, 3, strides=2, padding="same", activation="relu")(shift)
+        x = layers.ConvLSTM2D(32, 3, strides=2, padding="same", activation="relu", return_sequences=True)(shift)
         x = layers.BatchNormalization()(x)
         x = layers.Activation("relu")(x)
 
@@ -204,7 +207,7 @@ class models(object):
             x = layers.MaxPooling2D(3, strides=2, padding="same")(x)
 
             # Project residual
-            residual = layers.Conv2D(filters, 1, strides=2, padding="same", activation="relu")(previous_block_activation)
+            residual = layers.ConvLSTM2D(filters, 1, strides=2, padding="same", activation="relu", return_sequences=True)(previous_block_activation)
             x = layers.add([x, residual])  # Add back residual
             previous_block_activation = x
 
@@ -222,7 +225,7 @@ class models(object):
 
             # Project residual
             residual = layers.UpSampling2D(2)(previous_block_activation)
-            residual = layers.Conv2D(filters, 1, padding="same", activation="relu")(residual)
+            residual = layers.ConvLSTM2D(filters, 1, padding="same", activation="relu", return_sequences=True)(residual)
             x = layers.add([x, residual])  # Add back residual
             previous_block_activation = x
 
@@ -234,7 +237,7 @@ class models(object):
 
 
         for filters in [int(self.number_classes * 2)]:
-            x = layers.Conv2D(filters, 3, activation="softmax", padding="same")(x)
+            x = layers.ConvLSTM2D(filters, 3, activation="softmax", padding="same", return_sequences=True)(x)
             x2 = layers.Dense(filters)(features)
             x = layers.add([x, x2])  # Add back residual
 
@@ -251,11 +254,11 @@ class models(object):
 
             # Project residual
             residual = layers.UpSampling2D(2)(previous_block_activation)
-            residual = layers.Conv2D(filters, 1, padding="same", activation="relu")(residual)
+            residual = layers.ConvLSTM2D(filters, 1, padding="same", activation="relu", return_sequences=True)(residual)
             x = layers.add([x, residual])  # Add back residual
 
 
-        x = layers.Conv2D(self.number_classes, 3, activation="softmax", padding="same")(x)
+        x = layers.ConvLSTM2D(self.number_classes, 3, activation="softmax", padding="same", return_sequences=True)(x)
         outputs = layers.Dense(self.number_classes)(x)
         
         model = keras.Model(inputs=inputs, outputs=outputs)

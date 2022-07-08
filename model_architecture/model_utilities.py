@@ -305,7 +305,7 @@ class ShiftedTokenization(layers.Layer, model_utilities):
             target_width=self.image_size,
         )
 
-        shift_pad = tf.expand_dims(shift_pad, 0)
+        # shift_pad = tf.expand_dims(shift_pad, 0)
         return shift_pad
 
     def call(self, images):
@@ -381,7 +381,7 @@ class RandomNoise(ShiftedPatchTokenization, layers.Layer, model_utilities):
                 images = images + uniform_noise
 
 
-        random_img = tf.expand_dims(images, 0)
+        # random_img = tf.expand_dims(images, 0)
         return random_img
 
     def call(self, images):
