@@ -30,7 +30,7 @@ class model_building(models, computer_vision_utilities, model_utilities):
         elif self.model_type == "personal_model":
             self.model = self.personal_model()
 
-        # self.save_model_summary()
+        self.save_model_summary()
         self.display_model_archetecture()
 
 

@@ -28,6 +28,8 @@ class model_utilities(object):
         self.diag_attn_mask = tf.cast([(1-tf.eye(self.num_patches))], dtype=tf.int8)
         self.random_noise_count = 1
 
+        self.layer_dim = 16
+
 
 class Patches(layers.Layer, model_utilities):
     def __init__(self, **kwargs):
@@ -166,13 +168,15 @@ class ShiftedPatchTokenization(layers.Layer, model_utilities):
         return (tokens, patches)
 
 
-
 class RandomPatchNoise(ShiftedPatchTokenization, layers.Layer, model_utilities):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         model_utilities.__init__(self)
 
         self.half_patch = self.patch_size // 2
+        self.flatten_patches = layers.Reshape((self.num_patches, -1))
+        self.projection = layers.Dense(units=self.layer_dim)
+        self.layer_norm = layers.LayerNormalization(epsilon=self.epsilon)
     
     def adding_random_noise(self, images, noise_type):
      
@@ -258,8 +262,8 @@ class ShiftedTokenization(layers.Layer, model_utilities):
         
         self.half_patch = self.patch_size // 2
         self.flatten_patches = layers.Reshape((self.num_patches, -1))
-        self.projection = layers.Dense(units=self.projection_dim)
-        self.layer_norm = layers.LayerNormalization(epsilon=self.epsilon)
+        self.projection = layers.Dense(units=self.layer_dim)
+        self.layer_norm = layers.BatchNormalization()
 
     def crop_shift_pad(self, images, shift):
         # Build the diagonally shifted images
@@ -305,7 +309,7 @@ class ShiftedTokenization(layers.Layer, model_utilities):
             target_width=self.image_size,
         )
 
-        # shift_pad = tf.expand_dims(shift_pad, 0)
+        shift_pad = tf.expand_dims(shift_pad, 0)
         return shift_pad
 
     def call(self, images):
@@ -336,6 +340,9 @@ class RandomNoise(ShiftedPatchTokenization, layers.Layer, model_utilities):
         model_utilities.__init__(self)
 
         self.half_patch = self.patch_size // 2
+        self.flatten_patches = layers.Reshape((self.num_patches, -1))
+        self.projection = layers.Dense(units=self.layer_dim)
+        self.layer_norm = layers.BatchNormalization()
     
     def adding_random_noise(self, images, noise_type):
      
@@ -381,7 +388,7 @@ class RandomNoise(ShiftedPatchTokenization, layers.Layer, model_utilities):
                 images = images + uniform_noise
 
 
-        # random_img = tf.expand_dims(images, 0)
+        random_img = tf.expand_dims(images, 0)
         return random_img
 
     def call(self, images):
