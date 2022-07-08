@@ -30,8 +30,8 @@ class model_utilities(object):
 
 
 class Patches(layers.Layer, model_utilities):
-    def __init__(self):
-        super(Patches, self).__init__()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         model_utilities.__init__(self)
 
     def call(self, images):
@@ -49,8 +49,8 @@ class Patches(layers.Layer, model_utilities):
 
 
 class PatchEncoder(layers.Layer, model_utilities):
-    def __init__(self):
-        super(PatchEncoder, self).__init__()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         model_utilities.__init__(self)
         
         self.projection = layers.Dense(units=self.projection_dim)
@@ -319,22 +319,14 @@ class ShiftedTokenization(layers.Layer, model_utilities):
             ],
             axis=-1,
         )
-        # Patchify the images and flatten it
-        patches = tf.image.extract_patches(
-            images=images,
-            sizes=[1, self.patch_size, self.patch_size, 1],
-            strides=[1, self.patch_size, self.patch_size, 1],
-            rates=[1, 1, 1, 1],
-            padding="VALID",
-        )
 
-        flat_patches = self.flatten_patches(patches)
+        flat_patches = self.flatten_patches(images)
         
         # Layer normalize the flat patches and linearly project it
         tokens = self.layer_norm(flat_patches)
         tokens = self.projection(tokens)
 
-        return (tokens, patches)
+        return tokens
 
 
 
@@ -404,19 +396,12 @@ class RandomNoise(ShiftedPatchTokenization, layers.Layer, model_utilities):
             ],
             axis=-1,
         )
-        # Patchify the images and flatten it
-        patches = tf.image.extract_patches(
-            images=images,
-            sizes=[1, self.patch_size, self.patch_size, 1],
-            strides=[1, self.patch_size, self.patch_size, 1],
-            rates=[1, 1, 1, 1],
-            padding="VALID",
-        )
-        flat_patches = self.flatten_patches(patches)
+       
+        flat_patches = self.flatten_patches(images)
        
         # Layer normalize the flat patches and linearly project it
         tokens = self.layer_norm(flat_patches)
         tokens = self.projection(tokens)
 
-        return (tokens, patches)
+        return tokens
 

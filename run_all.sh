@@ -1,8 +1,8 @@
 # python3 computer_vision_analysis.py model_building model1 3
-python3 computer_vision_analysis.py model_building vit_transformer_shift_model 3
+# python3 computer_vision_analysis.py model_building vit_transformer_shift_model 3
 # python3 computer_vision_analysis.py model_building vit_transformer_shift_noise_model 3
 # python3 computer_vision_analysis.py model_building unet_model 3
-# python3 computer_vision_analysis.py model_building personal_model 3
+python3 computer_vision_analysis.py model_building personal_model 3
 
 
 # python3 computer_vision_analysis.py model_training model1 3

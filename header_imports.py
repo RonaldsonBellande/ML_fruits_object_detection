@@ -51,7 +51,6 @@ from pycocotools import mask as maskUtils
 from tensorflow import keras
 from tensorflow.python.client import device_lib
 from tensorflow import convert_to_tensor
-import tensorflow.keras
 import keras.backend as K
 
 from keras.models import load_model

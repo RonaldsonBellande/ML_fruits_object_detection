@@ -19,7 +19,6 @@ class models(object):
 
     # UNET model
     def unet_model(self):
-
         inputs = keras.Input(shape=self.input_shape)
         augmented = self.augmentation(inputs)
 
@@ -80,19 +79,19 @@ class models(object):
 
         patches = Patches()(augmented)
         encoded_patches = PatchEncoder()(patches)
-        shift_patches = ShiftedPatchTokenization()(encoded_patches)
+        (shift_patches, _) = ShiftedPatchTokenization()(encoded_patches)
 
         # Create multiple layers of the Transformer block.
         for _ in range(self.transformer_layers):
-            x1 = layers.LayerNormalization(epsilon=self.epsilon)(encoded_patches)
+            x1 = layers.LayerNormalization(epsilon=self.epsilon)(shift_patches)
             attention_output = MultiHeadAttentionLSA(num_heads=self.num_heads, key_dim=self.projection_dim, dropout=0.1)(x1, x1, attention_mask=self.diag_attn_mask)
-            x2 = layers.Add()([attention_output, encoded_patches])
+            x2 = layers.Add()([attention_output, shift_patches])
             x3 = layers.LayerNormalization(epsilon=self.epsilon)(x2)
             x3 = self.multilayer_perceptron(x3, self.transformer_units, 0.1)
-            encoded_patches = layers.Add()([x3, x2])
+            shift_patches = layers.Add()([x3, x2])
 
         # Create a [batch_size, projection_dim] tensor.
-        representation = layers.LayerNormalization(epsilon=self.epsilon)(encoded_patches)
+        representation = layers.LayerNormalization(epsilon=self.epsilon)(shift_patches)
         representation = layers.Flatten()(representation)
         representation = layers.Dropout(0.5)(representation)
         features = self.multilayer_perceptron(representation, self.mlp_head_units, 0.5)
@@ -110,19 +109,20 @@ class models(object):
 
         patches = Patches()(augmented)
         encoded_patches = PatchEncoder()(patches)
-        shift_patches = ShiftedPatchTokenization()(encoded_patches)
+        (shift_patches, _) = ShiftedPatchTokenization()(encoded_patches)
+        (noise_patches, _) = RandomPatchNoise()(shift_patches)
 
         # Create multiple layers of the Transformer block.
         for _ in range(self.transformer_layers):
-            x1 = layers.LayerNormalization(epsilon=self.epsilon)(shift_patches)
+            x1 = layers.LayerNormalization(epsilon=self.epsilon)(noise_patches)
             attention_output = MultiHeadAttentionLSA(num_heads=self.num_heads, key_dim=self.projection_dim, dropout=0.1)(x1, x1, attention_mask=self.diag_attn_mask)
-            x2 = layers.Add()([attention_output, shift_patches])
+            x2 = layers.Add()([attention_output, noise_patches])
             x3 = layers.LayerNormalization(epsilon=self.epsilon)(x2)
             x3 = self.multilayer_perceptron(x3, self.transformer_units, 0.1)
-            shift_patches = layers.Add()([x3, x2])
+            noise_patches = layers.Add()([x3, x2])
 
         # Create a [batch_size, projection_dim] tensor.
-        representation = layers.LayerNormalization(epsilon=self.epsilon)(shift_patches)
+        representation = layers.LayerNormalization(epsilon=self.epsilon)(noise_patches)
         representation = layers.Flatten()(representation)
         representation = layers.Dropout(0.5)(representation)
         features = self.multilayer_perceptron(representation, self.mlp_head_units, 0.5)
@@ -172,8 +172,8 @@ class models(object):
         (noise_patches, _) = RandomPatchNoise()(shift_patches)
 
         # None-Transformer
-        # (shift, _) = ShiftedTokenization()(inputs)
-        # (noise, _) = RandomNoise()(shift)
+        (shift, _) = ShiftedTokenization()(inputs)
+        (noise, _) = RandomNoise()(shift)
 
         # Create multiple layers of the Transformer block.
         for _ in range(self.transformer_layers):
@@ -185,7 +185,7 @@ class models(object):
             noise_patches = layers.Add()([x3, x2])
 
         ### [First half of the network: downsampling inputs]
-        x = layers.Conv2D(32, 3, strides=2, padding="same", activation="relu")(augmented)
+        x = layers.Conv2D(32, 3, strides=2, padding="same", activation="relu")(shift)
         x = layers.BatchNormalization()(x)
         x = layers.Activation("relu")(x)
 
