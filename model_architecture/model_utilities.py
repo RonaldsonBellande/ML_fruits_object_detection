@@ -327,7 +327,7 @@ class ShiftedTokenization(layers.Layer, model_utilities):
         flat_patches = self.flatten_patches(images)
         
         # Layer normalize the flat patches and linearly project it
-        tokens = self.layer_norm(flat_patches)
+        tokens = self.layer_norm(images)
         tokens = self.projection(tokens)
 
         return tokens
@@ -395,11 +395,11 @@ class RandomNoise(ShiftedPatchTokenization, layers.Layer, model_utilities):
         images = tf.concat(
             [
                 self.adding_random_noise(images, noise_type="normal"),
-                self.adding_random_noise(images, noise_type="Gaussian"),
+                # self.adding_random_noise(images, noise_type="Gaussian"),
                 # self.adding_random_noise(images, noise_type="SaltPepper"),
-                self.adding_random_noise(images, noise_type="Poisson"),
-                self.adding_random_noise(images, noise_type="Speckle"),
-                self.adding_random_noise(images, noise_type="Uniform"),
+                # self.adding_random_noise(images, noise_type="Poisson"),
+                # self.adding_random_noise(images, noise_type="Speckle"),
+                # self.adding_random_noise(images, noise_type="Uniform"),
             ],
             axis=-1,
         )
@@ -407,7 +407,7 @@ class RandomNoise(ShiftedPatchTokenization, layers.Layer, model_utilities):
         flat_patches = self.flatten_patches(images)
        
         # Layer normalize the flat patches and linearly project it
-        tokens = self.layer_norm(flat_patches)
+        tokens = self.layer_norm(images)
         tokens = self.projection(tokens)
 
         return tokens
