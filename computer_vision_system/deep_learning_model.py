@@ -33,13 +33,17 @@ class deep_q_learning(models):
         
         self.X_train = []
         self.Y_train = []
-
+        
         if self.model_type == "model1":
-            self.target_model = self.create_models_1()
-        elif self.model_type == "model2":
-            self.target_model = self.create_models_2()
-        elif self.model_type == "model3":
-            self.target_model = self.create_model_3()
+            self.model = self.create_models_1()
+        elif self.model_type == "vit_transformer_shift_model":
+            self.model = self.vit_transformer_shift_model()
+        elif self.model_type == "vit_transformer_shift_noise_model":
+            self.model = self.vit_transformer_shift_noise_model()
+        elif self.model_type == "unet_model":
+            self.model = self.unet_model()
+        elif self.model_type == "personal_model":
+            self.model = self.personal_model()
 
         self.target_model.set_weights(self.model.get_weights())
         self.replay_memory = deque(maxlen = self.delay_memory)

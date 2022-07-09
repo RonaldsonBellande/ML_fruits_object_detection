@@ -101,6 +101,6 @@ from computer_vision_system.image_enviroment import *
 from computer_vision_system.computer_vision_continuous_learning import *
 
 # Testinng
-# from tests.file_test import *
-# from tests.paths_test import *
-# from tests.model_test import *
+from tests.file_test import *
+from tests.paths_test import *
+from tests.model_test import *

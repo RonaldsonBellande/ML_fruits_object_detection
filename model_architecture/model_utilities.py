@@ -324,7 +324,7 @@ class ShiftedTokenization(layers.Layer, model_utilities):
             axis=-1,
         )
 
-        flat_patches = self.flatten_patches(images)
+        # flat_patches = self.flatten_patches(images)
         
         # Layer normalize the flat patches and linearly project it
         tokens = self.layer_norm(images)
@@ -404,7 +404,7 @@ class RandomNoise(ShiftedPatchTokenization, layers.Layer, model_utilities):
             axis=-1,
         )
        
-        flat_patches = self.flatten_patches(images)
+        # flat_patches = self.flatten_patches(images)
        
         # Layer normalize the flat patches and linearly project it
         tokens = self.layer_norm(images)
