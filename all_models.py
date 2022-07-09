@@ -188,7 +188,7 @@ class models(object):
             noise_patches = layers.Add()([x3, x2])
 
         ### [First half of the network: downsampling inputs]
-        x = layers.ConvLSTM2D(32, 3, strides=2, padding="same", activation="relu", return_sequences=True)(shift)
+        x = layers.ConvLSTM2D(32, 3, strides=2, padding="same", activation="relu", return_sequences=True)(noise)
         x = layers.BatchNormalization()(x)
         x = layers.Activation("relu")(x)
 

@@ -89,8 +89,8 @@ class ShiftedPatchTokenization(layers.Layer, model_utilities):
         
         self.half_patch = self.patch_size // 2
         self.flatten_patches = layers.Reshape((self.num_patches, -1))
-        self.projection = layers.Dense(units=self.projection_dim)
         self.layer_norm = layers.LayerNormalization(epsilon=self.epsilon)
+        self.projection = layers.Dense(units=self.projection_dim)
 
     def crop_shift_pad(self, images, shift):
         # Build the diagonally shifted images
@@ -175,8 +175,8 @@ class RandomPatchNoise(ShiftedPatchTokenization, layers.Layer, model_utilities):
 
         self.half_patch = self.patch_size // 2
         self.flatten_patches = layers.Reshape((self.num_patches, -1))
-        self.projection = layers.Dense(units=self.layer_dim)
         self.layer_norm = layers.LayerNormalization(epsilon=self.epsilon)
+        self.projection = layers.Dense(units=self.layer_dim)
     
     def adding_random_noise(self, images, noise_type):
      
@@ -262,8 +262,8 @@ class ShiftedTokenization(layers.Layer, model_utilities):
         
         self.half_patch = self.patch_size // 2
         self.flatten_patches = layers.Reshape((self.num_patches, -1))
-        self.projection = layers.Dense(units=self.layer_dim)
         self.layer_norm = layers.BatchNormalization()
+        self.projection = layers.Dense(units=self.layer_dim)
 
     def crop_shift_pad(self, images, shift):
         # Build the diagonally shifted images
@@ -341,8 +341,8 @@ class RandomNoise(ShiftedPatchTokenization, layers.Layer, model_utilities):
 
         self.half_patch = self.patch_size // 2
         self.flatten_patches = layers.Reshape((self.num_patches, -1))
-        self.projection = layers.Dense(units=self.layer_dim)
         self.layer_norm = layers.BatchNormalization()
+        self.projection = layers.Dense(units=self.layer_dim)
     
     def adding_random_noise(self, images, noise_type):
      
