@@ -168,6 +168,7 @@ class ShiftedPatchTokenization(layers.Layer, model_utilities):
         return (tokens, patches)
 
 
+
 class RandomPatchNoise(ShiftedPatchTokenization, layers.Layer, model_utilities):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

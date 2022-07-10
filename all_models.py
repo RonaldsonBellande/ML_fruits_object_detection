@@ -176,7 +176,7 @@ class models(object):
 
         # None-Transformer
         shift = ShiftedTokenization()(inputs)
-        # noise = RandomNoise()(shift)
+        noise = RandomNoise()(shift)
 
         # Create multiple layers of the Transformer block.
         for _ in range(self.transformer_layers):
@@ -187,8 +187,8 @@ class models(object):
             x3 = self.multilayer_perceptron(x3, self.transformer_units, 0.1)
             encoded_patches = layers.Add()([x3, x2])
 
-        ### [First half of the network: downsampling inputs]
-        x = layers.ConvLSTM2D(32, 3, strides=2, padding="same", activation="relu", return_sequences=True)(shift)
+        ### [First half of the network: downsampling inputs] ###
+        x = layers.Conv2D(32, 3, strides=2, padding="same")(augmented)
         x = layers.BatchNormalization()(x)
         x = layers.Activation("relu")(x)
 
@@ -197,35 +197,35 @@ class models(object):
         # Blocks 1, 2, 3 are identical apart from the feature depth.
         for filters in [64, 128, 256]:
             x = layers.Activation("relu")(x)
-            x = layers.ConvLSTM2D(filters, 3, strides=2, padding="same", activation="relu", return_sequences=True)(x)
+            x = layers.SeparableConv2D(filters, 3, padding="same")(x)
             x = layers.BatchNormalization()(x)
 
             x = layers.Activation("relu")(x)
-            x = layers.ConvLSTM2D(filters, 3, strides=2, padding="same", activation="relu", return_sequences=True)(x)
+            x = layers.SeparableConv2D(filters, 3, padding="same")(x)
             x = layers.BatchNormalization()(x)
 
             x = layers.MaxPooling2D(3, strides=2, padding="same")(x)
 
             # Project residual
-            residual = layers.ConvLSTM2D(filters, 1, strides=2, padding="same", activation="relu", return_sequences=True)(previous_block_activation)
+            residual = layers.Conv2D(filters, 1, strides=2, padding="same")(previous_block_activation)
             x = layers.add([x, residual])  # Add back residual
             previous_block_activation = x
 
         ### [Second half of the network: upsampling inputs] ###
         for filters in [256, 128, 64, 32]:
             x = layers.Activation("relu")(x)
-            x = layers.ConvLSTM2D(filters, 3, strides=2, padding="same", activation="relu", return_sequences=True)(x)
+            x = layers.Conv2DTranspose(filters, 3, padding="same")(x)
             x = layers.BatchNormalization()(x)
 
             x = layers.Activation("relu")(x)
-            x = layers.ConvLSTM2D(filters, 3, strides=2, padding="same", activation="relu", return_sequences=True)(x)
+            x = layers.Conv2DTranspose(filters, 3, padding="same")(x)
             x = layers.BatchNormalization()(x)
 
             x = layers.UpSampling2D(2)(x)
 
             # Project residual
             residual = layers.UpSampling2D(2)(previous_block_activation)
-            residual = layers.ConvLSTM2D(filters, 1, padding="same", activation="relu", return_sequences=True)(residual)
+            residual = layers.Conv2D(filters, 1, padding="same")(residual)
             x = layers.add([x, residual])  # Add back residual
             previous_block_activation = x
 
@@ -237,7 +237,7 @@ class models(object):
 
 
         for filters in [int(self.number_classes * 2)]:
-            x = layers.ConvLSTM2D(filters, 3, activation="softmax", padding="same", return_sequences=True)(x)
+            x = layers.Conv2D(filters, 3, activation="softmax", padding="same")(x)
             x2 = layers.Dense(filters)(features)
             x = layers.add([x, x2])  # Add back residual
 
@@ -254,11 +254,11 @@ class models(object):
 
             # Project residual
             residual = layers.UpSampling2D(2)(previous_block_activation)
-            residual = layers.ConvLSTM2D(filters, 1, padding="same", activation="relu", return_sequences=True)(residual)
+            residual = layers.Conv2D(filters, 1, padding="same", activation="relu")(residual)
             x = layers.add([x, residual])  # Add back residual
 
 
-        x = layers.ConvLSTM2D(self.number_classes, 3, activation="softmax", padding="same", return_sequences=True)(x)
+        x = layers.Conv2D(self.number_classes, 3, activation="softmax", padding="same")(x)
         outputs = layers.Dense(self.number_classes)(x)
         
         model = keras.Model(inputs=inputs, outputs=outputs)
@@ -269,7 +269,7 @@ class models(object):
 
 
 
-    # Personal model
+    # Personal model for video
     def personal_model_2(self):
 
         inputs = layers.Input(shape=self.input_shape)
