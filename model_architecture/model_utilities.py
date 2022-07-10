@@ -17,7 +17,7 @@ class model_utilities(object):
         self.mlp_head_units = [2048, 1024]
         self.epsilon = 1e-6
         
-        self.augmentation = keras.Sequential([
+        self.augmentation = Sequential([
             layers.Normalization(),
             layers.Resizing(self.image_size, self.image_size),
             layers.RandomFlip("horizontal"),

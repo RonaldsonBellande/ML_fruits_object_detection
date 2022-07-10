@@ -6,8 +6,8 @@
     "dataset_2_model1": "model1_computer_vision_categories_2_model.h5",
     "dataset_2_model2": "model2_computer_vision_categories_2_model.h5",
     "dataset_2_model3": "model3_computer_vision_categories_2_model.h5",
-    "dataset_1_path": "fruits_360_datasets/Training",
-    "dataset_2_path": "fruits_360_datasets/Training_Small"
+    "dataset_1_path": "fruits_360_datasets/Training/",
+    "dataset_2_path": "fruits_360_datasets/Training_Small/"
   },
   "model": {
     "batch_size": [

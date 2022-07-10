@@ -51,12 +51,10 @@ from pycocotools import mask as maskUtils
 from tensorflow import keras
 from tensorflow.python.client import device_lib
 from tensorflow import convert_to_tensor
-import keras.backend as K
 
-from keras.models import load_model
-from keras.preprocessing.image import load_img, img_to_array
-from keras.preprocessing.image import ImageDataGenerator
-
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing.image import load_img, img_to_array
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras import mixed_precision, Model
 from tensorflow.keras.applications.imagenet_utils import preprocess_input, decode_predictions
 from tensorflow.keras.preprocessing import image

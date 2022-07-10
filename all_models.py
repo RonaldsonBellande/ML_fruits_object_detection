@@ -169,7 +169,7 @@ class models(object):
         augmented = self.augmentation(inputs)
 
         # Transformer 
-        patches = Patches()(inputs)
+        patches = Patches()(augmented)
         encoded_patches = PatchEncoder()(patches)
         (shift_patches, _) = ShiftedPatchTokenization()(encoded_patches)
         (noise_patches, _) = RandomPatchNoise()(shift_patches)
@@ -261,8 +261,8 @@ class models(object):
         x = layers.Conv2D(self.number_classes, 3, activation="softmax", padding="same")(x)
         outputs = layers.Dense(self.number_classes)(x)
         
-        model = keras.Model(inputs=inputs, outputs=outputs)
-        model.compile(loss=keras.losses.binary_crossentropy, optimizer=keras.optimizers.Adam(),)
+        model = tf.keras.Model(inputs=inputs, outputs=outputs)
+        model.compile(loss=tf.keras.losses.binary_crossentropy, optimizer=tf.keras.optimizers.Adam())
 
         return model
 

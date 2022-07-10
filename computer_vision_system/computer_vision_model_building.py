@@ -12,7 +12,7 @@ class model_building(models, computer_vision_utilities, model_utilities):
         self.valid_images = [".jpg",".png"]
         self.model = None
         self.model_summary = self.config["building"]["model_summary"]
-        self.optimizer = keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999)
+        self.optimizer = tf.keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999)
         self.model_type = model_type
         
         self.labelencoder = LabelEncoder()
@@ -29,7 +29,7 @@ class model_building(models, computer_vision_utilities, model_utilities):
             self.model = self.unet_model()
         elif self.model_type == "personal_model":
             self.model = self.personal_model()
-
+        
         self.save_model_summary()
         self.display_model_archetecture()
 

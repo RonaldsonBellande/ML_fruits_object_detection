@@ -3,8 +3,7 @@ from header_imports import *
 class computer_vision_utilities(model_utilities):
     def setup_structure(self):
         
-        self.path  = "fruits_360_datasets/"
-        self.true_path = self.path + "Training_Small/"
+        self.true_path = self.config["dataset"]["dataset_2_path"]
         self.category_names =  os.listdir(self.true_path)
         self.number_classes = len(next(os.walk(self.true_path))[1])
             
