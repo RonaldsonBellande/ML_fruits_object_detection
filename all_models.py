@@ -20,7 +20,16 @@ class models(object):
     # UNET model
     def unet_model(self):
         inputs = keras.Input(shape=self.input_shape)
-        augmented = self.augmentation(inputs)
+        augmentation = tf.keras.Sequential([
+            layers.Normalization(),
+            layers.Resizing(self.image_size, self.image_size),
+            layers.RandomFlip("horizontal"),
+            layers.RandomRotation(factor=0.02),
+            layers.RandomZoom(height_factor=0.2, width_factor=0.2),
+        ])
+
+        augmented = augmentation(inputs)
+
 
         ### [First half of the network: downsampling inputs] ###
         x = layers.Conv2D(32, 3, strides=2, padding="same")(augmented)
@@ -74,25 +83,34 @@ class models(object):
 
     # VIT Transformer model 
     def vit_transformer_shift_model(self):
-
+        
         inputs = layers.Input(shape=self.input_shape)
-        augmented = self.augmentation(inputs)
+
+        augmentation = tf.keras.Sequential([
+            layers.Normalization(),
+            layers.Resizing(self.image_size, self.image_size),
+            layers.RandomFlip("horizontal"),
+            layers.RandomRotation(factor=0.02),
+            layers.RandomZoom(height_factor=0.2, width_factor=0.2),
+        ])
+
+        augmented = augmentation(inputs)
 
         patches = Patches()(augmented)
-        encoded_patches = PatchEncoder()(patches)
-        (shift_patches, _) = ShiftedPatchTokenization()(encoded_patches)
+        (shift_patches, _) = ShiftedPatchTokenization()(patches)
+        encoded_patches = PatchEncoder()(shift_patches)
 
         # Create multiple layers of the Transformer block.
         for _ in range(self.transformer_layers):
-            x1 = layers.LayerNormalization(epsilon=self.epsilon)(shift_patches)
+            x1 = layers.LayerNormalization(epsilon=self.epsilon)(encoded_patches)
             attention_output = MultiHeadAttentionLSA(num_heads=self.num_heads, key_dim=self.projection_dim, dropout=0.1)(x1, x1, attention_mask=self.diag_attn_mask)
-            x2 = layers.Add()([attention_output, shift_patches])
+            x2 = layers.Add()([attention_output, encoded_patches])
             x3 = layers.LayerNormalization(epsilon=self.epsilon)(x2)
             x3 = self.multilayer_perceptron(x3, self.transformer_units, 0.1)
-            shift_patches = layers.Add()([x3, x2])
+            encoded_patches = layers.Add()([x3, x2])
 
         # Create a [batch_size, projection_dim] tensor.
-        representation = layers.LayerNormalization(epsilon=self.epsilon)(shift_patches)
+        representation = layers.LayerNormalization(epsilon=self.epsilon)(encoded_patches)
         representation = layers.Flatten()(representation)
         representation = layers.Dropout(0.5)(representation)
         features = self.multilayer_perceptron(representation, self.mlp_head_units, 0.5)
@@ -103,28 +121,39 @@ class models(object):
         return model
 
 
+
     # VIT Transformer model 
     def vit_transformer_shift_noise_model(self):
 
         inputs = layers.Input(shape=self.input_shape)
-        augmented = self.augmentation(inputs)
+
+        augmentation = tf.keras.Sequential([
+            layers.Normalization(),
+            layers.Resizing(self.image_size, self.image_size),
+            layers.RandomFlip("horizontal"),
+            layers.RandomRotation(factor=0.02),
+            layers.RandomZoom(height_factor=0.2, width_factor=0.2),
+        ])
+
+        augmented = augmentation(inputs)
 
         patches = Patches()(augmented)
-        encoded_patches = PatchEncoder()(patches)
-        (shift_patches, _) = ShiftedPatchTokenization()(encoded_patches)
+        (shift_patches, _) = ShiftedPatchTokenization()(patches)
         (noise_patches, _) = RandomPatchNoise()(shift_patches)
+        encoded_patches = PatchEncoder()(noise_patches)
+
 
         # Create multiple layers of the Transformer block.
         for _ in range(self.transformer_layers):
-            x1 = layers.LayerNormalization(epsilon=self.epsilon)(noise_patches)
+            x1 = layers.LayerNormalization(epsilon=self.epsilon)(encoded_patches)
             attention_output = MultiHeadAttentionLSA(num_heads=self.num_heads, key_dim=self.projection_dim, dropout=0.1)(x1, x1, attention_mask=self.diag_attn_mask)
-            x2 = layers.Add()([attention_output, noise_patches])
+            x2 = layers.Add()([attention_output, encoded_patches])
             x3 = layers.LayerNormalization(epsilon=self.epsilon)(x2)
             x3 = self.multilayer_perceptron(x3, self.transformer_units, 0.1)
-            noise_patches = layers.Add()([x3, x2])
+            encoded_patches = layers.Add()([x3, x2])
 
         # Create a [batch_size, projection_dim] tensor.
-        representation = layers.LayerNormalization(epsilon=self.epsilon)(noise_patches)
+        representation = layers.LayerNormalization(epsilon=self.epsilon)(encoded_patches)
         representation = layers.Flatten()(representation)
         representation = layers.Dropout(0.5)(representation)
         features = self.multilayer_perceptron(representation, self.mlp_head_units, 0.5)
@@ -146,7 +175,15 @@ class models(object):
     def cnn_lstm_model(self):
 
         input = layers.Input(shape=self.input_shape)
-        augmented = self.augmentation(inputs)
+        augmentation = tf.keras.Sequential([
+            layers.Normalization(),
+            layers.Resizing(self.image_size, self.image_size),
+            layers.RandomFlip("horizontal"),
+            layers.RandomRotation(factor=0.02),
+            layers.RandomZoom(height_factor=0.2, width_factor=0.2),
+        ])
+
+        augmented = augmentation(inputs)
 
         x = layers.ConvLSTM2D(filters=64, kernel_size=(5, 5), padding="same", return_sequences=True, activation="relu",)(augmented)
         x = layers.BatchNormalization()(x)
@@ -165,14 +202,23 @@ class models(object):
     # Personal model
     def personal_model(self):
 
-        inputs = tf.keras.Input(shape=self.input_shape)
-        augmented = self.augmentation(inputs)
+        inputs = layers.Input(shape=self.input_shape)
+
+        augmentation = tf.keras.Sequential([
+            layers.Normalization(),
+            layers.Resizing(self.image_size, self.image_size),
+            layers.RandomFlip("horizontal"),
+            layers.RandomRotation(factor=0.02),
+            layers.RandomZoom(height_factor=0.2, width_factor=0.2),
+        ])
+
+        augmented = augmentation(inputs)
 
         # Transformer 
         patches = Patches()(augmented)
-        encoded_patches = PatchEncoder()(patches)
-        (shift_patches, _) = ShiftedPatchTokenization()(encoded_patches)
+        (shift_patches, _) = ShiftedPatchTokenization()(patches)
         (noise_patches, _) = RandomPatchNoise()(shift_patches)
+        encoded_patches = PatchEncoder()(noise_patches)
 
         # None-Transformer
         shift = ShiftedTokenization()(inputs)
@@ -261,7 +307,7 @@ class models(object):
         x = layers.Conv2D(self.number_classes, 3, activation="softmax", padding="same")(x)
         outputs = layers.Dense(self.number_classes)(x)
         
-        model = tf.keras.Model(inputs=inputs, outputs=outputs)
+        model = keras.Model(inputs=inputs, outputs=outputs)
         model.compile(loss=tf.keras.losses.binary_crossentropy, optimizer=tf.keras.optimizers.Adam())
 
         return model
@@ -273,7 +319,13 @@ class models(object):
     def personal_model_2(self):
 
         inputs = layers.Input(shape=self.input_shape)
-        augmented = self.augmentation(inputs)
+        augmentation = tf.keras.Sequential([
+            layers.Normalization(),
+            layers.Resizing(self.image_size, self.image_size),
+            layers.RandomFlip("horizontal"),
+            layers.RandomRotation(factor=0.02),
+            layers.RandomZoom(height_factor=0.2, width_factor=0.2),
+        ])
 
         # Transformer 
         patches = Patches()(inputs)
@@ -282,7 +334,7 @@ class models(object):
         (noise_patches, _) = RandomPatchNoise()(shift_patches)
 
         # None-Transformer
-        shift = ShiftedTokenization()(inputs)
+        # shift = ShiftedTokenization()(inputs)
         # noise = RandomNoise()(shift)
 
         # Create multiple layers of the Transformer block.

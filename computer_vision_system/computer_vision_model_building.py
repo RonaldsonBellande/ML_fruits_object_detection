@@ -2,7 +2,6 @@ from header_imports import *
 
 class model_building(models, computer_vision_utilities, model_utilities):
     def __init__(self, config, model_type, random_noise_count):
-
         model_utilities.__init__(self)
         
         self.config = config
