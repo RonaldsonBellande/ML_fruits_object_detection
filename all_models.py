@@ -165,7 +165,7 @@ class models(object):
     # Personal model
     def personal_model(self):
 
-        inputs = layers.Input(shape=self.input_shape)
+        inputs = tf.keras.Input(shape=self.input_shape)
         augmented = self.augmentation(inputs)
 
         # Transformer 
