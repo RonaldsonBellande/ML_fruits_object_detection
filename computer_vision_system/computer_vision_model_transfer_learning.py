@@ -9,10 +9,9 @@ class transfer_learning(models, computer_vision_utilities):
         self.random_noise_count = int(random_noise_count)
         self.image_size = 240
         self.saved_model = saved_model
-        self.number_of_nodes = 16
 
-        self.valid_images = [".jpg",".png"]
-        self.model_summary = "model_summary/"
+        self.valid_images =  self.config["dataset"]["valid_images"]
+        self.model_summary =  self.config["building"]["model_summary"]
         self.optimizer = keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999)
         self.model_type = model_type
         
@@ -22,17 +21,24 @@ class transfer_learning(models, computer_vision_utilities):
         
         if self.model_type == "model1":
             self.model = self.create_models_1()
-        elif self.model_type == "model2":
-            self.model = self.create_models_2()
-        elif self.model_type == "model3":
-            self.model = self.create_model_3()
+        elif self.model_type == "vit_transformer_shift_model":
+            self.model = self.vit_transformer_shift_model()
+        elif self.model_type == "vit_transformer_shift_noise_model":
+            self.model = self.vit_transformer_shift_noise_model()
+        elif self.model_type == "unet_model":
+            self.model = self.unet_model()
+        elif self.model_type == "personal_model":
+            self.model = self.personal_model()
 
         self.model.load_weights("models/" + self.saved_model)
-        self.batch_size = [10, 20, 40, 60, 80, 100]
-        self.epochs = [1, 5, 10, 50, 100, 200]
-        self.number_images_to_plot = 16
-        self.graph_path = "graph_charts/transfer_learning_with_model/"
-        self.model_path = "models/transfer_learning/" 
+
+        self.number_images_to_plot = self.config["transfer_learning"]["number_images_to_plot"] 
+        self.batch_size = self.config["model"]["batch_size"] 
+        self.epochs = self.config["model"]["epochs"] 
+
+        self.graph_path = self.config["transfer_learning"]["graph_path"] 
+        self.model_path = self.config["transfer_learning"]["model_path"]
+
         self.param_grid = dict(batch_size=self.batch_size, epochs=self.epochs)
         self.callback_1 = TensorBoard(log_dir="logs/{}-{}".format(self.model_type, int(time.time())))
         self.callback_2 = ModelCheckpoint(filepath=self.model_path, save_weights_only=True, verbose=1)

@@ -39,6 +39,7 @@
     "model_path": "models/"
   },
   "transfer_learning": {
+    "number_images_to_plot": 16,
     "graph_path": "graph_charts/transfer_learning_with_model/",
     "model_path": "models/transfer_learning/"
   },
@@ -59,6 +60,10 @@
     "value": 1
   },
   "continuous_learning": {
+    "number_images_to_plot": 16,
+    "algorithm_details": "graph_charts/algorithm_details/",
+    "model_detail": "graph_charts/model_details/",
+    "graph_path": "graph_charts/continuous_learning_with_models/",
     "model_path": "models/continuous_learning/"
   },
   "detection": {

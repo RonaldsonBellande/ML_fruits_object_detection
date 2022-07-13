@@ -2,12 +2,12 @@ from header_imports import *
 
 
 class continuous_learning(deep_q_learning, classification_enviroment, plot_graphs, computer_vision_utilities):
-    def __init__(self, saved_model, model_type, number_classes, image_type, episode, noise=0.0, reward_noise=0.0, state_world_size=400, algorithm_name="deep_q_learning", transfer_learning="true"):
+    def __init__(self, config, saved_model, model_type, number_classes, image_type, episode, noise=0.0, reward_noise=0.0, state_world_size=400, algorithm_name="deep_q_learning", transfer_learning="true"):
         
-        self.algorithm_details_path = "graph_charts/"
-        self.algorithm_details = self.algorithm_details_path + "algorithm_details/"
-        self.model_detail = self.algorithm_details_path + "model_details/"
-        self.graph_path = self.algorithm_details_path + "continuous_learning_with_models/"
+        self.config = config
+        self.algorithm_details = self.config["continuous_learning"]["algorithm_details"] 
+        self.model_detail =  self.config["continuous_learning"]["model_detail"] 
+        self.graph_path =  self.config["continuous_learning"]["graph_path"] 
        
         self.number_classes = int(number_classes)
         self.image_type = image_type
@@ -18,12 +18,15 @@ class continuous_learning(deep_q_learning, classification_enviroment, plot_graph
         self.label_name = []
         self.saved_model = saved_model
         self.model_type = model_type
-        self.batch_size = [10, 20, 40, 60, 80, 100]
-        self.epochs = [1, 5, 15, 50, 100, 200]
+        self.batch_size = self.config["model"]["batch_size"] 
+        self.epochs = self.config["model"]["epochs"] 
+
+        self.graph_path = self.config["continuous_learning"]["graph_path"] 
+        self.model_path = self.config["continuous_learning"]["model_path"]
+
         self.number_of_points = 2048
-        self.model_path = "models/continuous_learning/" 
-        self.number_images_to_plot = 16
-        self.valid_images = [".off"]
+        self.number_images_to_plot = self.config["transfer_learning"]["number_images_to_plot"] 
+        self.valid_images =  self.config["dataset"]["valid_images"]
         self.labelencoder = LabelEncoder()
         
         self.setup_structure()
