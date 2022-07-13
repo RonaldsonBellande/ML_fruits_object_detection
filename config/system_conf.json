@@ -6,7 +6,11 @@
     "dataset_2_model1": "model1_computer_vision_categories_2_model.h5",
     "dataset_2_model2": "model2_computer_vision_categories_2_model.h5",
     "dataset_2_model3": "model3_computer_vision_categories_2_model.h5",
-    "dataset_path": "fruits_360_datasets/Training_Small/"
+    "dataset_path": "fruits_360_datasets/Training_Small/",
+    "valid_images": [
+      ".json",
+      ".png"
+    ]
   },
   "model": {
     "batch_size": [
@@ -30,6 +34,7 @@
     "model_summary": "model_summary/"
   },
   "training": {
+    "number_images_to_plot": 16,
     "graph_path": "graph_charts/",
     "model_path": "models/"
   },

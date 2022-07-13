@@ -13,7 +13,7 @@ class models(object):
         model.add(Dropout(0.25))
         model.add(Flatten())
         model.add(Dense(units = self.number_classes, activation = "softmax", input_dim=2))
-        model.compile(loss = "binary_crossentropy", optimizer="adam", metrics=["accuracy"])
+        model.compile(loss=tf.keras.losses.binary_crossentropy, optimizer=self.optimizer, metrics=["accuracy"])
 
         return model
 
@@ -74,7 +74,7 @@ class models(object):
 
         outputs = layers.Conv2D(self.number_classes, 3, activation="softmax", padding="same")(x)
         model = keras.Model(inputs=inputs, outputs=outputs)
-        model.compile(loss=keras.losses.binary_crossentropy, optimizer=keras.optimizers.Adam())
+        model.compile(loss=tf.keras.losses.binary_crossentropy, optimizer=self.optimizer, metrics=["accuracy"])
         
         return model
 
@@ -115,7 +115,7 @@ class models(object):
         features = self.multilayer_perceptron(representation, self.mlp_head_units, 0.5)
         outputs = layers.Dense(self.number_classes)(features)
         model = keras.Model(inputs=inputs, outputs=outputs)
-        model.compile(loss=keras.losses.binary_crossentropy, optimizer=keras.optimizers.Adam())
+        model.compile(loss=tf.keras.losses.binary_crossentropy, optimizer=self.optimizer, metrics=["accuracy"])
 
         return model
 
@@ -158,7 +158,7 @@ class models(object):
         features = self.multilayer_perceptron(representation, self.mlp_head_units, 0.5)
         outputs = layers.Dense(self.number_classes)(features)
         model = keras.Model(inputs=inputs, outputs=outputs)
-        model.compile(loss=keras.losses.binary_crossentropy, optimizer=keras.optimizers.Adam())
+        model.compile(loss=tf.keras.losses.binary_crossentropy, optimizer=self.optimizer, metrics=["accuracy"])
         
         return model
 
@@ -192,7 +192,7 @@ class models(object):
         x = layers.Conv3D(filters=1, kernel_size=(3, 3, 3), activation="sigmoid", padding="same")(x)
 
         model = keras.models.Model(input, x)
-        model.compile(loss=keras.losses.binary_crossentropy, optimizer=keras.optimizers.Adam())
+        model.compile(loss=tf.keras.losses.binary_crossentropy, optimizer=self.optimizer, metrics=["accuracy"])
 
         return model
 
@@ -307,7 +307,8 @@ class models(object):
         outputs = layers.Dense(self.number_classes)(x)
         
         model = keras.Model(inputs=inputs, outputs=outputs)
-        model.compile(loss=tf.keras.losses.binary_crossentropy, optimizer=tf.keras.optimizers.Adam())
+        model.compile(loss=tf.keras.losses.binary_crossentropy, optimizer=self.optimizer, metrics=["accuracy"])
+
 
         return model
 
@@ -420,7 +421,7 @@ class models(object):
         outputs = layers.Dense(self.number_classes)(x)
         
         model = keras.Model(inputs=inputs, outputs=outputs)
-        model.compile(loss=keras.losses.binary_crossentropy, optimizer=keras.optimizers.Adam())
+        model.compile(loss=keras.losses.binary_crossentropy, optimizer=self.optimizer)
 
         return model
 

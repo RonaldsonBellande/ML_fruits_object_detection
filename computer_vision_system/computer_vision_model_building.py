@@ -8,7 +8,7 @@ class model_building(models, computer_vision_utilities, model_utilities):
         self.image_file = []
         self.label_name = []
         self.random_noise_count = int(random_noise_count)
-        self.valid_images = [".jpg",".png"]
+        self.valid_images = self.config["dataset"]["valid_images"]
         self.model = None
         self.model_summary = self.config["building"]["model_summary"]
         self.optimizer = tf.keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999)
