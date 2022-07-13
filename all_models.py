@@ -30,7 +30,6 @@ class models(object):
 
         augmented = augmentation(inputs)
 
-
         ### [First half of the network: downsampling inputs] ###
         x = layers.Conv2D(32, 3, strides=2, padding="same")(augmented)
         x = layers.BatchNormalization()(x)
@@ -75,7 +74,7 @@ class models(object):
 
         outputs = layers.Conv2D(self.number_classes, 3, activation="softmax", padding="same")(x)
         model = keras.Model(inputs=inputs, outputs=outputs)
-        model.compile(loss=keras.losses.binary_crossentropy, optimizer=keras.optimizers.Adam(),)
+        model.compile(loss=keras.losses.binary_crossentropy, optimizer=keras.optimizers.Adam())
         
         return model
 
@@ -116,7 +115,7 @@ class models(object):
         features = self.multilayer_perceptron(representation, self.mlp_head_units, 0.5)
         outputs = layers.Dense(self.number_classes)(features)
         model = keras.Model(inputs=inputs, outputs=outputs)
-        model.compile(loss=keras.losses.binary_crossentropy, optimizer=keras.optimizers.Adam(),)
+        model.compile(loss=keras.losses.binary_crossentropy, optimizer=keras.optimizers.Adam())
 
         return model
 
@@ -159,7 +158,7 @@ class models(object):
         features = self.multilayer_perceptron(representation, self.mlp_head_units, 0.5)
         outputs = layers.Dense(self.number_classes)(features)
         model = keras.Model(inputs=inputs, outputs=outputs)
-        model.compile(loss=keras.losses.binary_crossentropy, optimizer=keras.optimizers.Adam(),)
+        model.compile(loss=keras.losses.binary_crossentropy, optimizer=keras.optimizers.Adam())
         
         return model
 
@@ -193,7 +192,7 @@ class models(object):
         x = layers.Conv3D(filters=1, kernel_size=(3, 3, 3), activation="sigmoid", padding="same")(x)
 
         model = keras.models.Model(input, x)
-        model.compile(loss=keras.losses.binary_crossentropy, optimizer=keras.optimizers.Adam(),)
+        model.compile(loss=keras.losses.binary_crossentropy, optimizer=keras.optimizers.Adam())
 
         return model
 
@@ -258,7 +257,7 @@ class models(object):
             previous_block_activation = x
 
         ### [Second half of the network: upsampling inputs] ###
-        for filters in [256, 128, 64, 32]:
+        for filters in [256, 128, 64]:
             x = layers.Activation("relu")(x)
             x = layers.Conv2DTranspose(filters, 3, padding="same")(x)
             x = layers.BatchNormalization()(x)
@@ -282,7 +281,7 @@ class models(object):
         features = self.multilayer_perceptron(representation, self.mlp_head_units, 0.5)
 
 
-        for filters in [int(self.number_classes * 2)]:
+        for filters in [32]:
             x = layers.Conv2D(filters, 3, activation="softmax", padding="same")(x)
             x2 = layers.Dense(filters)(features)
             x = layers.add([x, x2])  # Add back residual
@@ -421,7 +420,7 @@ class models(object):
         outputs = layers.Dense(self.number_classes)(x)
         
         model = keras.Model(inputs=inputs, outputs=outputs)
-        model.compile(loss=keras.losses.binary_crossentropy, optimizer=keras.optimizers.Adam(),)
+        model.compile(loss=keras.losses.binary_crossentropy, optimizer=keras.optimizers.Adam())
 
         return model
 
