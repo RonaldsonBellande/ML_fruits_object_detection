@@ -44,8 +44,8 @@ class continuous_learning(deep_q_learning, classification_enviroment, plot_graph
         self.episode_rewards = []
         self.step_per_episode = []
 
-        deep_q_learning.__init__(self, saved_model=self.saved_model, model_type=self.model_type, dense_size=self.dense_size, batch_size=self.batch_size[3], exploration_decay=self.exploration_decay, algorithm_name=self.algorithm_name, transfer_learning=self.transfer_learning)
-        classification_enviroment.__init__(self, number_classes=self.number_classes, data_set=(self.image_file, self.label_name), image_per_episode=self.image_per_episode)
+        deep_q_learning.__init__(self, config=self.config , saved_model=self.saved_model, model_type=self.model_type, dense_size=self.dense_size, batch_size=self.batch_size[3], exploration_decay=self.exploration_decay, algorithm_name=self.algorithm_name, transfer_learning=self.transfer_learning)
+        classification_enviroment.__init__(self, config=self.config , number_classes=self.number_classes, data_set=(self.image_file, self.label_name), image_per_episode=self.image_per_episode)
         
         if self.algorithm_name == "deep_q_learning":
             self.deep_q_learning()

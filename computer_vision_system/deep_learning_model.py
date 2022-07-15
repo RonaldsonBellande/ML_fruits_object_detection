@@ -21,13 +21,6 @@ class deep_q_learning(models):
         self.optimizer = tf.keras.optimizers.Adam(lr=self.learning_rate, beta_1=0.9, beta_2=0.999)
         self.transfer_learning = transfer_learning
 
-        if self.model_type == "model1":
-            self.model = self.create_models_1()
-        elif self.model_type == "model2":
-            self.model = self.create_models_2()
-        elif self.model_type == "model3":
-            self.model = self.create_model_3()
-
         if self.transfer_learning == "true":
             self.model.load_weights(self.model_path)
         
