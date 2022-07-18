@@ -10,7 +10,13 @@ class model_building(models, computer_vision_utilities, model_utilities):
         self.random_noise_count = int(random_noise_count)
         self.valid_images = self.config["dataset"]["valid_images"]
         self.model = None
+
         self.model_summary = self.config["building"]["model_summary"]
+        self.model_parameters = self.model_summary + self.config["building"]["model_parameters"]
+        self.model_image = self.model_summary + self.config["building"]["model_image"]
+        self.model_h5 = self.model_summary + self.config["building"]["model_h5"]
+        self.model_pb = self.model_summary + self.config["building"]["model_pb"]
+
         self.optimizer = tf.keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999)
         self.model_type = model_type
         
@@ -31,17 +37,32 @@ class model_building(models, computer_vision_utilities, model_utilities):
         
         self.save_model_summary()
         self.display_model_archetecture()
+        self.model_archetecture_h5()
+        self.h5_to_pb()
+        self.model_archetecture_onnx()
 
 
 
     def save_model_summary(self):
-        with open(self.model_summary + self.model_type +"_summary_architecture_" + str(self.number_classes) +".txt", "w+") as model:
+        with open(self.model_parameters + self.model_type +"_summary_architecture_" + str(self.number_classes) +".txt", "w+") as model:
             with redirect_stdout(model):
                 self.model.summary()
 
 
     def display_model_archetecture(self):
-        keras.utils.plot_model(self.model, to_file=self.model_summary + self.model_type +"_architecture_" + str(self.number_classes) +".png", show_shapes=True, show_layer_names=True)
+        keras.utils.plot_model(self.model, to_file=self.model_image + self.model_type +"_architecture_" + str(self.number_classes) +".png", show_shapes=True, show_layer_names=True)
+
+
+    def model_archetecture_h5(self):
+        self.model.save(self.model_h5 + self.model_type + "_h5_architecture_"+ str(self.number_classes)+"_model.h5")
+
+
+    def h5_to_pb(self):
+        tf.keras.experimental.export_saved_model(self.model, self.model_pb)
+
+
+    def model_archetecture_onnx(self):
+        pass
 
 
     

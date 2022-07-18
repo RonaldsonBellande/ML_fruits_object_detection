@@ -31,7 +31,12 @@
     ]
   },
   "building": {
-    "model_summary": "model_summary/"
+    "model_summary": "model_summary/",
+    "model_parameters": "model_architecture_parameters/",
+    "model_image": "model_architecture_image/",
+    "model_h5": "model_architecture_h5/",
+    "model_pb": "model_architecture_pb/",
+    "model_onnx": "model_architecture_onnx"
   },
   "training": {
     "number_images_to_plot": 16,

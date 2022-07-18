@@ -93,311 +93,343 @@ ________________________________________________________________________________
  layer_normalization_10 (LayerN  (1, 1600, 64)       128         ['add_5[0][0]']                  
  ormalization)                                                                                    
                                                                                                   
+ conv2d (Conv2D)                (None, 120, 120, 32  896         ['sequential[0][0]']             
+                                )                                                                 
+                                                                                                  
  multi_head_attention_lsa_3 (Mu  (1, 1600, 64)       66368       ['layer_normalization_10[0][0]', 
  ltiHeadAttentionLSA)                                             'layer_normalization_10[0][0]'] 
+                                                                                                  
+ batch_normalization_2 (BatchNo  (None, 120, 120, 32  128        ['conv2d[0][0]']                 
+ rmalization)                   )                                                                 
                                                                                                   
  add_6 (Add)                    (1, 1600, 64)        0           ['multi_head_attention_lsa_3[0][0
                                                                  ]',                              
                                                                   'add_5[0][0]']                  
                                                                                                   
- layer_normalization_11 (LayerN  (1, 1600, 64)       128         ['add_6[0][0]']                  
- ormalization)                                                                                    
-                                                                                                  
- dense_13 (Dense)               (1, 1600, 128)       8320        ['layer_normalization_11[0][0]'] 
-                                                                                                  
- dropout_6 (Dropout)            (1, 1600, 128)       0           ['dense_13[0][0]']               
-                                                                                                  
- dense_14 (Dense)               (1, 1600, 64)        8256        ['dropout_6[0][0]']              
-                                                                                                  
- dropout_7 (Dropout)            (1, 1600, 64)        0           ['dense_14[0][0]']               
-                                                                                                  
- add_7 (Add)                    (1, 1600, 64)        0           ['dropout_7[0][0]',              
-                                                                  'add_6[0][0]']                  
-                                                                                                  
- conv2d (Conv2D)                (None, 120, 120, 32  896         ['sequential[0][0]']             
-                                )                                                                 
-                                                                                                  
- layer_normalization_12 (LayerN  (1, 1600, 64)       128         ['add_7[0][0]']                  
- ormalization)                                                                                    
-                                                                                                  
- batch_normalization_2 (BatchNo  (None, 120, 120, 32  128        ['conv2d[0][0]']                 
- rmalization)                   )                                                                 
-                                                                                                  
- multi_head_attention_lsa_4 (Mu  (1, 1600, 64)       66368       ['layer_normalization_12[0][0]', 
- ltiHeadAttentionLSA)                                             'layer_normalization_12[0][0]'] 
-                                                                                                  
  activation (Activation)        (None, 120, 120, 32  0           ['batch_normalization_2[0][0]']  
                                 )                                                                 
                                                                                                   
- add_8 (Add)                    (1, 1600, 64)        0           ['multi_head_attention_lsa_4[0][0
-                                                                 ]',                              
-                                                                  'add_7[0][0]']                  
+ layer_normalization_11 (LayerN  (1, 1600, 64)       128         ['add_6[0][0]']                  
+ ormalization)                                                                                    
                                                                                                   
  activation_1 (Activation)      (None, 120, 120, 32  0           ['activation[0][0]']             
                                 )                                                                 
                                                                                                   
- layer_normalization_13 (LayerN  (1, 1600, 64)       128         ['add_8[0][0]']                  
- ormalization)                                                                                    
+ dense_13 (Dense)               (1, 1600, 128)       8320        ['layer_normalization_11[0][0]'] 
                                                                                                   
  separable_conv2d (SeparableCon  (None, 120, 120, 64  2400       ['activation_1[0][0]']           
  v2D)                           )                                                                 
                                                                                                   
- dense_15 (Dense)               (1, 1600, 128)       8320        ['layer_normalization_13[0][0]'] 
+ dropout_6 (Dropout)            (1, 1600, 128)       0           ['dense_13[0][0]']               
                                                                                                   
  batch_normalization_3 (BatchNo  (None, 120, 120, 64  256        ['separable_conv2d[0][0]']       
  rmalization)                   )                                                                 
                                                                                                   
- dropout_8 (Dropout)            (1, 1600, 128)       0           ['dense_15[0][0]']               
+ dense_14 (Dense)               (1, 1600, 64)        8256        ['dropout_6[0][0]']              
                                                                                                   
  activation_2 (Activation)      (None, 120, 120, 64  0           ['batch_normalization_3[0][0]']  
                                 )                                                                 
                                                                                                   
- dense_16 (Dense)               (1, 1600, 64)        8256        ['dropout_8[0][0]']              
+ dropout_7 (Dropout)            (1, 1600, 64)        0           ['dense_14[0][0]']               
                                                                                                   
  separable_conv2d_1 (SeparableC  (None, 120, 120, 64  4736       ['activation_2[0][0]']           
  onv2D)                         )                                                                 
                                                                                                   
- dropout_9 (Dropout)            (1, 1600, 64)        0           ['dense_16[0][0]']               
+ add_7 (Add)                    (1, 1600, 64)        0           ['dropout_7[0][0]',              
+                                                                  'add_6[0][0]']                  
                                                                                                   
  batch_normalization_4 (BatchNo  (None, 120, 120, 64  256        ['separable_conv2d_1[0][0]']     
  rmalization)                   )                                                                 
                                                                                                   
- add_9 (Add)                    (1, 1600, 64)        0           ['dropout_9[0][0]',              
-                                                                  'add_8[0][0]']                  
+ layer_normalization_12 (LayerN  (1, 1600, 64)       128         ['add_7[0][0]']                  
+ ormalization)                                                                                    
                                                                                                   
  max_pooling2d (MaxPooling2D)   (None, 60, 60, 64)   0           ['batch_normalization_4[0][0]']  
                                                                                                   
  conv2d_1 (Conv2D)              (None, 60, 60, 64)   2112        ['activation[0][0]']             
                                                                                                   
- layer_normalization_14 (LayerN  (1, 1600, 64)       128         ['add_9[0][0]']                  
- ormalization)                                                                                    
+ multi_head_attention_lsa_4 (Mu  (1, 1600, 64)       66368       ['layer_normalization_12[0][0]', 
+ ltiHeadAttentionLSA)                                             'layer_normalization_12[0][0]'] 
                                                                                                   
  add_16 (Add)                   (None, 60, 60, 64)   0           ['max_pooling2d[0][0]',          
                                                                   'conv2d_1[0][0]']               
                                                                                                   
- multi_head_attention_lsa_5 (Mu  (1, 1600, 64)       66368       ['layer_normalization_14[0][0]', 
- ltiHeadAttentionLSA)                                             'layer_normalization_14[0][0]'] 
+ add_8 (Add)                    (1, 1600, 64)        0           ['multi_head_attention_lsa_4[0][0
+                                                                 ]',                              
+                                                                  'add_7[0][0]']                  
                                                                                                   
  activation_3 (Activation)      (None, 60, 60, 64)   0           ['add_16[0][0]']                 
                                                                                                   
- add_10 (Add)                   (1, 1600, 64)        0           ['multi_head_attention_lsa_5[0][0
-                                                                 ]',                              
-                                                                  'add_9[0][0]']                  
+ layer_normalization_13 (LayerN  (1, 1600, 64)       128         ['add_8[0][0]']                  
+ ormalization)                                                                                    
                                                                                                   
  separable_conv2d_2 (SeparableC  (None, 60, 60, 128)  8896       ['activation_3[0][0]']           
  onv2D)                                                                                           
                                                                                                   
- layer_normalization_15 (LayerN  (1, 1600, 64)       128         ['add_10[0][0]']                 
- ormalization)                                                                                    
+ dense_15 (Dense)               (1, 1600, 128)       8320        ['layer_normalization_13[0][0]'] 
                                                                                                   
  batch_normalization_5 (BatchNo  (None, 60, 60, 128)  512        ['separable_conv2d_2[0][0]']     
  rmalization)                                                                                     
                                                                                                   
- dense_17 (Dense)               (1, 1600, 128)       8320        ['layer_normalization_15[0][0]'] 
+ dropout_8 (Dropout)            (1, 1600, 128)       0           ['dense_15[0][0]']               
                                                                                                   
  activation_4 (Activation)      (None, 60, 60, 128)  0           ['batch_normalization_5[0][0]']  
                                                                                                   
- dropout_10 (Dropout)           (1, 1600, 128)       0           ['dense_17[0][0]']               
+ dense_16 (Dense)               (1, 1600, 64)        8256        ['dropout_8[0][0]']              
                                                                                                   
  separable_conv2d_3 (SeparableC  (None, 60, 60, 128)  17664      ['activation_4[0][0]']           
  onv2D)                                                                                           
                                                                                                   
- dense_18 (Dense)               (1, 1600, 64)        8256        ['dropout_10[0][0]']             
+ dropout_9 (Dropout)            (1, 1600, 64)        0           ['dense_16[0][0]']               
                                                                                                   
  batch_normalization_6 (BatchNo  (None, 60, 60, 128)  512        ['separable_conv2d_3[0][0]']     
  rmalization)                                                                                     
                                                                                                   
- dropout_11 (Dropout)           (1, 1600, 64)        0           ['dense_18[0][0]']               
+ add_9 (Add)                    (1, 1600, 64)        0           ['dropout_9[0][0]',              
+                                                                  'add_8[0][0]']                  
                                                                                                   
  max_pooling2d_1 (MaxPooling2D)  (None, 30, 30, 128)  0          ['batch_normalization_6[0][0]']  
                                                                                                   
  conv2d_2 (Conv2D)              (None, 30, 30, 128)  8320        ['add_16[0][0]']                 
                                                                                                   
- add_11 (Add)                   (1, 1600, 64)        0           ['dropout_11[0][0]',             
-                                                                  'add_10[0][0]']                 
+ layer_normalization_14 (LayerN  (1, 1600, 64)       128         ['add_9[0][0]']                  
+ ormalization)                                                                                    
                                                                                                   
  add_17 (Add)                   (None, 30, 30, 128)  0           ['max_pooling2d_1[0][0]',        
                                                                   'conv2d_2[0][0]']               
                                                                                                   
- layer_normalization_16 (LayerN  (1, 1600, 64)       128         ['add_11[0][0]']                 
- ormalization)                                                                                    
+ multi_head_attention_lsa_5 (Mu  (1, 1600, 64)       66368       ['layer_normalization_14[0][0]', 
+ ltiHeadAttentionLSA)                                             'layer_normalization_14[0][0]'] 
                                                                                                   
  activation_5 (Activation)      (None, 30, 30, 128)  0           ['add_17[0][0]']                 
                                                                                                   
- multi_head_attention_lsa_6 (Mu  (1, 1600, 64)       66368       ['layer_normalization_16[0][0]', 
- ltiHeadAttentionLSA)                                             'layer_normalization_16[0][0]'] 
+ add_10 (Add)                   (1, 1600, 64)        0           ['multi_head_attention_lsa_5[0][0
+                                                                 ]',                              
+                                                                  'add_9[0][0]']                  
                                                                                                   
  separable_conv2d_4 (SeparableC  (None, 30, 30, 256)  34176      ['activation_5[0][0]']           
  onv2D)                                                                                           
                                                                                                   
- add_12 (Add)                   (1, 1600, 64)        0           ['multi_head_attention_lsa_6[0][0
-                                                                 ]',                              
-                                                                  'add_11[0][0]']                 
+ layer_normalization_15 (LayerN  (1, 1600, 64)       128         ['add_10[0][0]']                 
+ ormalization)                                                                                    
                                                                                                   
  batch_normalization_7 (BatchNo  (None, 30, 30, 256)  1024       ['separable_conv2d_4[0][0]']     
  rmalization)                                                                                     
                                                                                                   
- layer_normalization_17 (LayerN  (1, 1600, 64)       128         ['add_12[0][0]']                 
- ormalization)                                                                                    
+ dense_17 (Dense)               (1, 1600, 128)       8320        ['layer_normalization_15[0][0]'] 
                                                                                                   
  activation_6 (Activation)      (None, 30, 30, 256)  0           ['batch_normalization_7[0][0]']  
                                                                                                   
- dense_19 (Dense)               (1, 1600, 128)       8320        ['layer_normalization_17[0][0]'] 
+ dropout_10 (Dropout)           (1, 1600, 128)       0           ['dense_17[0][0]']               
                                                                                                   
  separable_conv2d_5 (SeparableC  (None, 30, 30, 256)  68096      ['activation_6[0][0]']           
  onv2D)                                                                                           
                                                                                                   
- dropout_12 (Dropout)           (1, 1600, 128)       0           ['dense_19[0][0]']               
+ dense_18 (Dense)               (1, 1600, 64)        8256        ['dropout_10[0][0]']             
                                                                                                   
  batch_normalization_8 (BatchNo  (None, 30, 30, 256)  1024       ['separable_conv2d_5[0][0]']     
  rmalization)                                                                                     
                                                                                                   
- dense_20 (Dense)               (1, 1600, 64)        8256        ['dropout_12[0][0]']             
+ dropout_11 (Dropout)           (1, 1600, 64)        0           ['dense_18[0][0]']               
                                                                                                   
  max_pooling2d_2 (MaxPooling2D)  (None, 15, 15, 256)  0          ['batch_normalization_8[0][0]']  
                                                                                                   
  conv2d_3 (Conv2D)              (None, 15, 15, 256)  33024       ['add_17[0][0]']                 
                                                                                                   
- dropout_13 (Dropout)           (1, 1600, 64)        0           ['dense_20[0][0]']               
+ add_11 (Add)                   (1, 1600, 64)        0           ['dropout_11[0][0]',             
+                                                                  'add_10[0][0]']                 
                                                                                                   
  add_18 (Add)                   (None, 15, 15, 256)  0           ['max_pooling2d_2[0][0]',        
                                                                   'conv2d_3[0][0]']               
                                                                                                   
- add_13 (Add)                   (1, 1600, 64)        0           ['dropout_13[0][0]',             
-                                                                  'add_12[0][0]']                 
+ layer_normalization_16 (LayerN  (1, 1600, 64)       128         ['add_11[0][0]']                 
+ ormalization)                                                                                    
                                                                                                   
  activation_7 (Activation)      (None, 15, 15, 256)  0           ['add_18[0][0]']                 
                                                                                                   
- layer_normalization_18 (LayerN  (1, 1600, 64)       128         ['add_13[0][0]']                 
- ormalization)                                                                                    
+ multi_head_attention_lsa_6 (Mu  (1, 1600, 64)       66368       ['layer_normalization_16[0][0]', 
+ ltiHeadAttentionLSA)                                             'layer_normalization_16[0][0]'] 
                                                                                                   
  conv2d_transpose (Conv2DTransp  (None, 15, 15, 256)  590080     ['activation_7[0][0]']           
  ose)                                                                                             
                                                                                                   
- multi_head_attention_lsa_7 (Mu  (1, 1600, 64)       66368       ['layer_normalization_18[0][0]', 
- ltiHeadAttentionLSA)                                             'layer_normalization_18[0][0]'] 
+ add_12 (Add)                   (1, 1600, 64)        0           ['multi_head_attention_lsa_6[0][0
+                                                                 ]',                              
+                                                                  'add_11[0][0]']                 
                                                                                                   
  batch_normalization_9 (BatchNo  (None, 15, 15, 256)  1024       ['conv2d_transpose[0][0]']       
  rmalization)                                                                                     
                                                                                                   
- add_14 (Add)                   (1, 1600, 64)        0           ['multi_head_attention_lsa_7[0][0
-                                                                 ]',                              
-                                                                  'add_13[0][0]']                 
+ layer_normalization_17 (LayerN  (1, 1600, 64)       128         ['add_12[0][0]']                 
+ ormalization)                                                                                    
                                                                                                   
  activation_8 (Activation)      (None, 15, 15, 256)  0           ['batch_normalization_9[0][0]']  
                                                                                                   
- layer_normalization_19 (LayerN  (1, 1600, 64)       128         ['add_14[0][0]']                 
- ormalization)                                                                                    
+ dense_19 (Dense)               (1, 1600, 128)       8320        ['layer_normalization_17[0][0]'] 
                                                                                                   
  conv2d_transpose_1 (Conv2DTran  (None, 15, 15, 256)  590080     ['activation_8[0][0]']           
  spose)                                                                                           
                                                                                                   
- dense_21 (Dense)               (1, 1600, 128)       8320        ['layer_normalization_19[0][0]'] 
+ dropout_12 (Dropout)           (1, 1600, 128)       0           ['dense_19[0][0]']               
                                                                                                   
  batch_normalization_10 (BatchN  (None, 15, 15, 256)  1024       ['conv2d_transpose_1[0][0]']     
  ormalization)                                                                                    
                                                                                                   
  up_sampling2d_1 (UpSampling2D)  (None, 30, 30, 256)  0          ['add_18[0][0]']                 
                                                                                                   
- dropout_14 (Dropout)           (1, 1600, 128)       0           ['dense_21[0][0]']               
+ dense_20 (Dense)               (1, 1600, 64)        8256        ['dropout_12[0][0]']             
                                                                                                   
  up_sampling2d (UpSampling2D)   (None, 30, 30, 256)  0           ['batch_normalization_10[0][0]'] 
                                                                                                   
  conv2d_4 (Conv2D)              (None, 30, 30, 256)  65792       ['up_sampling2d_1[0][0]']        
                                                                                                   
- dense_22 (Dense)               (1, 1600, 64)        8256        ['dropout_14[0][0]']             
+ dropout_13 (Dropout)           (1, 1600, 64)        0           ['dense_20[0][0]']               
                                                                                                   
  add_19 (Add)                   (None, 30, 30, 256)  0           ['up_sampling2d[0][0]',          
                                                                   'conv2d_4[0][0]']               
                                                                                                   
- dropout_15 (Dropout)           (1, 1600, 64)        0           ['dense_22[0][0]']               
+ add_13 (Add)                   (1, 1600, 64)        0           ['dropout_13[0][0]',             
+                                                                  'add_12[0][0]']                 
                                                                                                   
  activation_9 (Activation)      (None, 30, 30, 256)  0           ['add_19[0][0]']                 
                                                                                                   
- add_15 (Add)                   (1, 1600, 64)        0           ['dropout_15[0][0]',             
-                                                                  'add_14[0][0]']                 
+ layer_normalization_18 (LayerN  (1, 1600, 64)       128         ['add_13[0][0]']                 
+ ormalization)                                                                                    
                                                                                                   
  conv2d_transpose_2 (Conv2DTran  (None, 30, 30, 128)  295040     ['activation_9[0][0]']           
  spose)                                                                                           
                                                                                                   
- layer_normalization_20 (LayerN  (1, 1600, 64)       128         ['add_15[0][0]']                 
- ormalization)                                                                                    
+ multi_head_attention_lsa_7 (Mu  (1, 1600, 64)       66368       ['layer_normalization_18[0][0]', 
+ ltiHeadAttentionLSA)                                             'layer_normalization_18[0][0]'] 
                                                                                                   
  batch_normalization_11 (BatchN  (None, 30, 30, 128)  512        ['conv2d_transpose_2[0][0]']     
  ormalization)                                                                                    
                                                                                                   
- flatten (Flatten)              (1, 102400)          0           ['layer_normalization_20[0][0]'] 
+ add_14 (Add)                   (1, 1600, 64)        0           ['multi_head_attention_lsa_7[0][0
+                                                                 ]',                              
+                                                                  'add_13[0][0]']                 
                                                                                                   
  activation_10 (Activation)     (None, 30, 30, 128)  0           ['batch_normalization_11[0][0]'] 
                                                                                                   
- dropout_16 (Dropout)           (1, 102400)          0           ['flatten[0][0]']                
+ layer_normalization_19 (LayerN  (1, 1600, 64)       128         ['add_14[0][0]']                 
+ ormalization)                                                                                    
                                                                                                   
  conv2d_transpose_3 (Conv2DTran  (None, 30, 30, 128)  147584     ['activation_10[0][0]']          
  spose)                                                                                           
                                                                                                   
- dense_23 (Dense)               (1, 2048)            209717248   ['dropout_16[0][0]']             
+ dense_21 (Dense)               (1, 1600, 128)       8320        ['layer_normalization_19[0][0]'] 
                                                                                                   
  batch_normalization_12 (BatchN  (None, 30, 30, 128)  512        ['conv2d_transpose_3[0][0]']     
  ormalization)                                                                                    
                                                                                                   
  up_sampling2d_3 (UpSampling2D)  (None, 60, 60, 256)  0          ['add_19[0][0]']                 
                                                                                                   
- dropout_17 (Dropout)           (1, 2048)            0           ['dense_23[0][0]']               
+ dropout_14 (Dropout)           (1, 1600, 128)       0           ['dense_21[0][0]']               
                                                                                                   
  up_sampling2d_2 (UpSampling2D)  (None, 60, 60, 128)  0          ['batch_normalization_12[0][0]'] 
                                                                                                   
  conv2d_5 (Conv2D)              (None, 60, 60, 128)  32896       ['up_sampling2d_3[0][0]']        
                                                                                                   
- dense_24 (Dense)               (1, 1024)            2098176     ['dropout_17[0][0]']             
+ dense_22 (Dense)               (1, 1600, 64)        8256        ['dropout_14[0][0]']             
                                                                                                   
  add_20 (Add)                   (None, 60, 60, 128)  0           ['up_sampling2d_2[0][0]',        
                                                                   'conv2d_5[0][0]']               
                                                                                                   
- dropout_18 (Dropout)           (1, 1024)            0           ['dense_24[0][0]']               
+ dropout_15 (Dropout)           (1, 1600, 64)        0           ['dense_22[0][0]']               
                                                                                                   
- conv2d_6 (Conv2D)              (None, 60, 60, 32)   36896       ['add_20[0][0]']                 
+ activation_11 (Activation)     (None, 60, 60, 128)  0           ['add_20[0][0]']                 
                                                                                                   
- dense_25 (Dense)               (1, 32)              32800       ['dropout_18[0][0]']             
+ add_15 (Add)                   (1, 1600, 64)        0           ['dropout_15[0][0]',             
+                                                                  'add_14[0][0]']                 
                                                                                                   
- add_21 (Add)                   (None, 60, 60, 32)   0           ['conv2d_6[0][0]',               
-                                                                  'dense_25[0][0]']               
-                                                                                                  
- activation_11 (Activation)     (None, 60, 60, 32)   0           ['add_21[0][0]']                 
-                                                                                                  
- activation_12 (Activation)     (None, 60, 60, 32)   0           ['activation_11[0][0]']          
-                                                                                                  
- conv2d_transpose_4 (Conv2DTran  (None, 60, 60, 32)  9248        ['activation_12[0][0]']          
+ conv2d_transpose_4 (Conv2DTran  (None, 60, 60, 64)  73792       ['activation_11[0][0]']          
  spose)                                                                                           
                                                                                                   
- batch_normalization_13 (BatchN  (None, 60, 60, 32)  128         ['conv2d_transpose_4[0][0]']     
+ layer_normalization_20 (LayerN  (1, 1600, 64)       128         ['add_15[0][0]']                 
  ormalization)                                                                                    
                                                                                                   
- activation_13 (Activation)     (None, 60, 60, 32)   0           ['batch_normalization_13[0][0]'] 
+ batch_normalization_13 (BatchN  (None, 60, 60, 64)  256         ['conv2d_transpose_4[0][0]']     
+ ormalization)                                                                                    
                                                                                                   
- conv2d_transpose_5 (Conv2DTran  (None, 60, 60, 32)  9248        ['activation_13[0][0]']          
+ flatten (Flatten)              (1, 102400)          0           ['layer_normalization_20[0][0]'] 
+                                                                                                  
+ activation_12 (Activation)     (None, 60, 60, 64)   0           ['batch_normalization_13[0][0]'] 
+                                                                                                  
+ dropout_16 (Dropout)           (1, 102400)          0           ['flatten[0][0]']                
+                                                                                                  
+ conv2d_transpose_5 (Conv2DTran  (None, 60, 60, 64)  36928       ['activation_12[0][0]']          
  spose)                                                                                           
                                                                                                   
- batch_normalization_14 (BatchN  (None, 60, 60, 32)  128         ['conv2d_transpose_5[0][0]']     
+ dense_23 (Dense)               (1, 2048)            209717248   ['dropout_16[0][0]']             
+                                                                                                  
+ batch_normalization_14 (BatchN  (None, 60, 60, 64)  256         ['conv2d_transpose_5[0][0]']     
  ormalization)                                                                                    
                                                                                                   
  up_sampling2d_5 (UpSampling2D)  (None, 120, 120, 12  0          ['add_20[0][0]']                 
                                 8)                                                                
                                                                                                   
- up_sampling2d_4 (UpSampling2D)  (None, 120, 120, 32  0          ['batch_normalization_14[0][0]'] 
+ dropout_17 (Dropout)           (1, 2048)            0           ['dense_23[0][0]']               
+                                                                                                  
+ up_sampling2d_4 (UpSampling2D)  (None, 120, 120, 64  0          ['batch_normalization_14[0][0]'] 
                                 )                                                                 
                                                                                                   
- conv2d_7 (Conv2D)              (None, 120, 120, 32  4128        ['up_sampling2d_5[0][0]']        
+ conv2d_6 (Conv2D)              (None, 120, 120, 64  8256        ['up_sampling2d_5[0][0]']        
                                 )                                                                 
                                                                                                   
- add_22 (Add)                   (None, 120, 120, 32  0           ['up_sampling2d_4[0][0]',        
-                                )                                 'conv2d_7[0][0]']               
+ dense_24 (Dense)               (1, 1024)            2098176     ['dropout_17[0][0]']             
                                                                                                   
- conv2d_8 (Conv2D)              (None, 120, 120, 4)  1156        ['add_22[0][0]']                 
+ add_21 (Add)                   (None, 120, 120, 64  0           ['up_sampling2d_4[0][0]',        
+                                )                                 'conv2d_6[0][0]']               
                                                                                                   
- dense_26 (Dense)               (None, 120, 120, 4)  20          ['conv2d_8[0][0]']               
+ dropout_18 (Dropout)           (1, 1024)            0           ['dense_24[0][0]']               
+                                                                                                  
+ conv2d_7 (Conv2D)              (None, 120, 120, 32  18464       ['add_21[0][0]']                 
+                                )                                                                 
+                                                                                                  
+ dense_25 (Dense)               (1, 32)              32800       ['dropout_18[0][0]']             
+                                                                                                  
+ add_22 (Add)                   (None, 120, 120, 32  0           ['conv2d_7[0][0]',               
+                                )                                 'dense_25[0][0]']               
+                                                                                                  
+ activation_13 (Activation)     (None, 120, 120, 32  0           ['add_22[0][0]']                 
+                                )                                                                 
+                                                                                                  
+ activation_14 (Activation)     (None, 120, 120, 32  0           ['activation_13[0][0]']          
+                                )                                                                 
+                                                                                                  
+ conv2d_transpose_6 (Conv2DTran  (None, 120, 120, 32  9248       ['activation_14[0][0]']          
+ spose)                         )                                                                 
+                                                                                                  
+ batch_normalization_15 (BatchN  (None, 120, 120, 32  128        ['conv2d_transpose_6[0][0]']     
+ ormalization)                  )                                                                 
+                                                                                                  
+ activation_15 (Activation)     (None, 120, 120, 32  0           ['batch_normalization_15[0][0]'] 
+                                )                                                                 
+                                                                                                  
+ conv2d_transpose_7 (Conv2DTran  (None, 120, 120, 32  9248       ['activation_15[0][0]']          
+ spose)                         )                                                                 
+                                                                                                  
+ batch_normalization_16 (BatchN  (None, 120, 120, 32  128        ['conv2d_transpose_7[0][0]']     
+ ormalization)                  )                                                                 
+                                                                                                  
+ up_sampling2d_7 (UpSampling2D)  (None, 240, 240, 64  0          ['add_21[0][0]']                 
+                                )                                                                 
+                                                                                                  
+ up_sampling2d_6 (UpSampling2D)  (None, 240, 240, 32  0          ['batch_normalization_16[0][0]'] 
+                                )                                                                 
+                                                                                                  
+ conv2d_8 (Conv2D)              (None, 240, 240, 32  2080        ['up_sampling2d_7[0][0]']        
+                                )                                                                 
+                                                                                                  
+ add_23 (Add)                   (None, 240, 240, 32  0           ['up_sampling2d_6[0][0]',        
+                                )                                 'conv2d_8[0][0]']               
+                                                                                                  
+ conv2d_9 (Conv2D)              (None, 240, 240, 4)  1156        ['add_23[0][0]']                 
+                                                                                                  
+ dense_26 (Dense)               (None, 240, 240, 4)  20          ['conv2d_9[0][0]']               
                                                                                                   
 ==================================================================================================
-Total params: 215,870,095
-Trainable params: 215,866,568
-Non-trainable params: 3,527
+Total params: 215,969,103
+Trainable params: 215,965,320
+Non-trainable params: 3,783
 __________________________________________________________________________________________________
