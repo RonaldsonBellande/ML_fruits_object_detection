@@ -1,6 +1,6 @@
 # Copyright © 2021 Ronaldson Bellande
 from __future__ import print_function
-import cv2, sys, math, random, warnings, os, os.path, json, pydicom, glob, shutil, datetime, zipfile, urllib.request, tensorflow as tf, time, trimesh, librosa, gym
+import cv2, sys, math, random, warnings, os, os.path, json, pydicom, glob, shutil, datetime, zipfile, urllib.request, tensorflow as tf, tensorflow.compat.v1 as tf1, time, trimesh, librosa, gym
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -66,6 +66,7 @@ from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping, TensorB
 from tensorflow.keras.utils import to_categorical
 from tensorflow.python.framework.graph_util import convert_variables_to_constants
 
+tf1.compat.v1.disable_eager_execution()
 # Testing
 from pytest_pipeline import PipelineRun, mark, utils
 

@@ -5,7 +5,7 @@ ________________________________________________________________________________
  input_1 (InputLayer)           [(None, 240, 240, 3  0           []                               
                                 )]                                                                
                                                                                                   
- sequential (Sequential)        (None, 240, 240, 3)  7           ['input_1[0][0]']                
+ sequential (Sequential)        multiple             7           ['input_1[0][0]']                
                                                                                                   
  conv2d (Conv2D)                (None, 120, 120, 32  896         ['sequential[0][0]']             
                                 )                                                                 

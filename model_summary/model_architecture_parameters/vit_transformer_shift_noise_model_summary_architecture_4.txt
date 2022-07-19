@@ -5,7 +5,7 @@ ________________________________________________________________________________
  input_1 (InputLayer)           [(None, 240, 240, 3  0           []                               
                                 )]                                                                
                                                                                                   
- sequential (Sequential)        (None, 240, 240, 3)  7           ['input_1[0][0]']                
+ sequential (Sequential)        multiple             7           ['input_1[0][0]']                
                                                                                                   
  patches (Patches)              (None, None, 108)    0           ['sequential[0][0]']             
                                                                                                   
@@ -33,13 +33,13 @@ ________________________________________________________________________________
                                                                                                   
  dense_4 (Dense)                (1, 1600, 128)       8320        ['layer_normalization_4[0][0]']  
                                                                                                   
- dropout (Dropout)              (1, 1600, 128)       0           ['dense_4[0][0]']                
+ dropout_1 (Dropout)            (1, 1600, 128)       0           ['dense_4[0][0]']                
                                                                                                   
- dense_5 (Dense)                (1, 1600, 64)        8256        ['dropout[0][0]']                
+ dense_5 (Dense)                (1, 1600, 64)        8256        ['dropout_1[0][0]']              
                                                                                                   
- dropout_1 (Dropout)            (1, 1600, 64)        0           ['dense_5[0][0]']                
+ dropout_2 (Dropout)            (1, 1600, 64)        0           ['dense_5[0][0]']                
                                                                                                   
- add_1 (Add)                    (1, 1600, 64)        0           ['dropout_1[0][0]',              
+ add_1 (Add)                    (1, 1600, 64)        0           ['dropout_2[0][0]',              
                                                                   'add[0][0]']                    
                                                                                                   
  layer_normalization_5 (LayerNo  (1, 1600, 64)       128         ['add_1[0][0]']                  
@@ -57,13 +57,13 @@ ________________________________________________________________________________
                                                                                                   
  dense_6 (Dense)                (1, 1600, 128)       8320        ['layer_normalization_6[0][0]']  
                                                                                                   
- dropout_2 (Dropout)            (1, 1600, 128)       0           ['dense_6[0][0]']                
+ dropout_4 (Dropout)            (1, 1600, 128)       0           ['dense_6[0][0]']                
                                                                                                   
- dense_7 (Dense)                (1, 1600, 64)        8256        ['dropout_2[0][0]']              
+ dense_7 (Dense)                (1, 1600, 64)        8256        ['dropout_4[0][0]']              
                                                                                                   
- dropout_3 (Dropout)            (1, 1600, 64)        0           ['dense_7[0][0]']                
+ dropout_5 (Dropout)            (1, 1600, 64)        0           ['dense_7[0][0]']                
                                                                                                   
- add_3 (Add)                    (1, 1600, 64)        0           ['dropout_3[0][0]',              
+ add_3 (Add)                    (1, 1600, 64)        0           ['dropout_5[0][0]',              
                                                                   'add_2[0][0]']                  
                                                                                                   
  layer_normalization_7 (LayerNo  (1, 1600, 64)       128         ['add_3[0][0]']                  
@@ -81,13 +81,13 @@ ________________________________________________________________________________
                                                                                                   
  dense_8 (Dense)                (1, 1600, 128)       8320        ['layer_normalization_8[0][0]']  
                                                                                                   
- dropout_4 (Dropout)            (1, 1600, 128)       0           ['dense_8[0][0]']                
+ dropout_7 (Dropout)            (1, 1600, 128)       0           ['dense_8[0][0]']                
                                                                                                   
- dense_9 (Dense)                (1, 1600, 64)        8256        ['dropout_4[0][0]']              
+ dense_9 (Dense)                (1, 1600, 64)        8256        ['dropout_7[0][0]']              
                                                                                                   
- dropout_5 (Dropout)            (1, 1600, 64)        0           ['dense_9[0][0]']                
+ dropout_8 (Dropout)            (1, 1600, 64)        0           ['dense_9[0][0]']                
                                                                                                   
- add_5 (Add)                    (1, 1600, 64)        0           ['dropout_5[0][0]',              
+ add_5 (Add)                    (1, 1600, 64)        0           ['dropout_8[0][0]',              
                                                                   'add_4[0][0]']                  
                                                                                                   
  layer_normalization_9 (LayerNo  (1, 1600, 64)       128         ['add_5[0][0]']                  
@@ -105,13 +105,13 @@ ________________________________________________________________________________
                                                                                                   
  dense_10 (Dense)               (1, 1600, 128)       8320        ['layer_normalization_10[0][0]'] 
                                                                                                   
- dropout_6 (Dropout)            (1, 1600, 128)       0           ['dense_10[0][0]']               
+ dropout_10 (Dropout)           (1, 1600, 128)       0           ['dense_10[0][0]']               
                                                                                                   
- dense_11 (Dense)               (1, 1600, 64)        8256        ['dropout_6[0][0]']              
+ dense_11 (Dense)               (1, 1600, 64)        8256        ['dropout_10[0][0]']             
                                                                                                   
- dropout_7 (Dropout)            (1, 1600, 64)        0           ['dense_11[0][0]']               
+ dropout_11 (Dropout)           (1, 1600, 64)        0           ['dense_11[0][0]']               
                                                                                                   
- add_7 (Add)                    (1, 1600, 64)        0           ['dropout_7[0][0]',              
+ add_7 (Add)                    (1, 1600, 64)        0           ['dropout_11[0][0]',             
                                                                   'add_6[0][0]']                  
                                                                                                   
  layer_normalization_11 (LayerN  (1, 1600, 64)       128         ['add_7[0][0]']                  
@@ -129,13 +129,13 @@ ________________________________________________________________________________
                                                                                                   
  dense_12 (Dense)               (1, 1600, 128)       8320        ['layer_normalization_12[0][0]'] 
                                                                                                   
- dropout_8 (Dropout)            (1, 1600, 128)       0           ['dense_12[0][0]']               
+ dropout_13 (Dropout)           (1, 1600, 128)       0           ['dense_12[0][0]']               
                                                                                                   
- dense_13 (Dense)               (1, 1600, 64)        8256        ['dropout_8[0][0]']              
+ dense_13 (Dense)               (1, 1600, 64)        8256        ['dropout_13[0][0]']             
                                                                                                   
- dropout_9 (Dropout)            (1, 1600, 64)        0           ['dense_13[0][0]']               
+ dropout_14 (Dropout)           (1, 1600, 64)        0           ['dense_13[0][0]']               
                                                                                                   
- add_9 (Add)                    (1, 1600, 64)        0           ['dropout_9[0][0]',              
+ add_9 (Add)                    (1, 1600, 64)        0           ['dropout_14[0][0]',             
                                                                   'add_8[0][0]']                  
                                                                                                   
  layer_normalization_13 (LayerN  (1, 1600, 64)       128         ['add_9[0][0]']                  
@@ -153,13 +153,13 @@ ________________________________________________________________________________
                                                                                                   
  dense_14 (Dense)               (1, 1600, 128)       8320        ['layer_normalization_14[0][0]'] 
                                                                                                   
- dropout_10 (Dropout)           (1, 1600, 128)       0           ['dense_14[0][0]']               
+ dropout_16 (Dropout)           (1, 1600, 128)       0           ['dense_14[0][0]']               
                                                                                                   
- dense_15 (Dense)               (1, 1600, 64)        8256        ['dropout_10[0][0]']             
+ dense_15 (Dense)               (1, 1600, 64)        8256        ['dropout_16[0][0]']             
                                                                                                   
- dropout_11 (Dropout)           (1, 1600, 64)        0           ['dense_15[0][0]']               
+ dropout_17 (Dropout)           (1, 1600, 64)        0           ['dense_15[0][0]']               
                                                                                                   
- add_11 (Add)                   (1, 1600, 64)        0           ['dropout_11[0][0]',             
+ add_11 (Add)                   (1, 1600, 64)        0           ['dropout_17[0][0]',             
                                                                   'add_10[0][0]']                 
                                                                                                   
  layer_normalization_15 (LayerN  (1, 1600, 64)       128         ['add_11[0][0]']                 
@@ -177,13 +177,13 @@ ________________________________________________________________________________
                                                                                                   
  dense_16 (Dense)               (1, 1600, 128)       8320        ['layer_normalization_16[0][0]'] 
                                                                                                   
- dropout_12 (Dropout)           (1, 1600, 128)       0           ['dense_16[0][0]']               
+ dropout_19 (Dropout)           (1, 1600, 128)       0           ['dense_16[0][0]']               
                                                                                                   
- dense_17 (Dense)               (1, 1600, 64)        8256        ['dropout_12[0][0]']             
+ dense_17 (Dense)               (1, 1600, 64)        8256        ['dropout_19[0][0]']             
                                                                                                   
- dropout_13 (Dropout)           (1, 1600, 64)        0           ['dense_17[0][0]']               
+ dropout_20 (Dropout)           (1, 1600, 64)        0           ['dense_17[0][0]']               
                                                                                                   
- add_13 (Add)                   (1, 1600, 64)        0           ['dropout_13[0][0]',             
+ add_13 (Add)                   (1, 1600, 64)        0           ['dropout_20[0][0]',             
                                                                   'add_12[0][0]']                 
                                                                                                   
  layer_normalization_17 (LayerN  (1, 1600, 64)       128         ['add_13[0][0]']                 
@@ -201,13 +201,13 @@ ________________________________________________________________________________
                                                                                                   
  dense_18 (Dense)               (1, 1600, 128)       8320        ['layer_normalization_18[0][0]'] 
                                                                                                   
- dropout_14 (Dropout)           (1, 1600, 128)       0           ['dense_18[0][0]']               
+ dropout_22 (Dropout)           (1, 1600, 128)       0           ['dense_18[0][0]']               
                                                                                                   
- dense_19 (Dense)               (1, 1600, 64)        8256        ['dropout_14[0][0]']             
+ dense_19 (Dense)               (1, 1600, 64)        8256        ['dropout_22[0][0]']             
                                                                                                   
- dropout_15 (Dropout)           (1, 1600, 64)        0           ['dense_19[0][0]']               
+ dropout_23 (Dropout)           (1, 1600, 64)        0           ['dense_19[0][0]']               
                                                                                                   
- add_15 (Add)                   (1, 1600, 64)        0           ['dropout_15[0][0]',             
+ add_15 (Add)                   (1, 1600, 64)        0           ['dropout_23[0][0]',             
                                                                   'add_14[0][0]']                 
                                                                                                   
  layer_normalization_19 (LayerN  (1, 1600, 64)       128         ['add_15[0][0]']                 
@@ -215,17 +215,17 @@ ________________________________________________________________________________
                                                                                                   
  flatten (Flatten)              (1, 102400)          0           ['layer_normalization_19[0][0]'] 
                                                                                                   
- dropout_16 (Dropout)           (1, 102400)          0           ['flatten[0][0]']                
+ dropout_24 (Dropout)           (1, 102400)          0           ['flatten[0][0]']                
                                                                                                   
- dense_20 (Dense)               (1, 2048)            209717248   ['dropout_16[0][0]']             
+ dense_20 (Dense)               (1, 2048)            209717248   ['dropout_24[0][0]']             
                                                                                                   
- dropout_17 (Dropout)           (1, 2048)            0           ['dense_20[0][0]']               
+ dropout_25 (Dropout)           (1, 2048)            0           ['dense_20[0][0]']               
                                                                                                   
- dense_21 (Dense)               (1, 1024)            2098176     ['dropout_17[0][0]']             
+ dense_21 (Dense)               (1, 1024)            2098176     ['dropout_25[0][0]']             
                                                                                                   
- dropout_18 (Dropout)           (1, 1024)            0           ['dense_21[0][0]']               
+ dropout_26 (Dropout)           (1, 1024)            0           ['dense_21[0][0]']               
                                                                                                   
- dense_22 (Dense)               (1, 4)               4100        ['dropout_18[0][0]']             
+ dense_22 (Dense)               (1, 4)               4100        ['dropout_26[0][0]']             
                                                                                                   
 ==================================================================================================
 Total params: 213,871,867
