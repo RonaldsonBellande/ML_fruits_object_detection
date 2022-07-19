@@ -49,6 +49,7 @@ from pycocotools.cocoeval import COCOeval
 from pycocotools import mask as maskUtils
 
 from tensorflow import keras
+from keras import backend as K
 from tensorflow.python.client import device_lib
 from tensorflow import convert_to_tensor
 

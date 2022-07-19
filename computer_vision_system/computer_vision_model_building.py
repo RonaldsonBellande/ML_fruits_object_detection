@@ -1,6 +1,6 @@
 from header_imports import *
 
-class model_building(models, computer_vision_utilities, model_utilities):
+class model_building(models, computer_vision_utilities, model_utilities, freesing_model):
     def __init__(self, config, model_type, random_noise_count):
         model_utilities.__init__(self)
         
@@ -37,20 +37,20 @@ class model_building(models, computer_vision_utilities, model_utilities):
         
         self.save_model_summary()
         self.display_model_archetecture()
-        self.model_archetecture_h5()
+        # self.model_archetecture_h5()
         self.h5_to_pb()
         self.model_archetecture_onnx()
 
 
 
     def save_model_summary(self):
-        with open(self.model_parameters + self.model_type +"_summary_architecture_" + str(self.number_classes) +".txt", "w+") as model:
+        with open(self.model_parameters + self.model_type + "_summary_architecture_" + str(self.number_classes) +".txt", "w+") as model:
             with redirect_stdout(model):
                 self.model.summary()
 
 
     def display_model_archetecture(self):
-        keras.utils.plot_model(self.model, to_file=self.model_image + self.model_type +"_architecture_" + str(self.number_classes) +".png", show_shapes=True, show_layer_names=True)
+        keras.utils.plot_model(self.model, to_file=self.model_image + self.model_type + "_architecture_" + str(self.number_classes) +".png", show_shapes=True, show_layer_names=True)
 
 
     def model_archetecture_h5(self):
@@ -58,7 +58,8 @@ class model_building(models, computer_vision_utilities, model_utilities):
 
 
     def h5_to_pb(self):
-        tf.keras.experimental.export_saved_model(self.model, self.model_pb)
+        frozen_graph = self.freeze(output_names=[out.name for out in self.model.outputs])
+        tf.train.write_graph(frozen_graph, self.model_pb , self.model_type + "_architecture_pd_" + str(self.number_classes) +".pd", as_text=False)
 
 
     def model_archetecture_onnx(self):
