@@ -1,7 +1,6 @@
 from header_imports import *
 
-if __name__ == "__main__":
-   
+def main():
     with open("config/system_conf.json") as (file):
         system_config = json.load(file)
 
@@ -42,6 +41,12 @@ if __name__ == "__main__":
 
         if sys.argv[1] == "semantic_segmentation":
             computer_vision_analysis_obj = semantic_segmentation(config=system_config, saved_model=input_model)
+
+
+
+if __name__ == "__main__":
+    main()
+
 
 
 

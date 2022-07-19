@@ -55,6 +55,5 @@ class freesing_model(object):
             if clear_devices:
                 for node in input_graph_def.node:
                     node.device = ""
-            frozen_graph = tf.graph_util.convert_variables_to_constants(
-                session, input_graph_def, output_names, freeze_var_names)
+            frozen_graph = tf.graph_util.convert_variables_to_constants(session, input_graph_def, output_names, freeze_var_names)
             return frozen_graph

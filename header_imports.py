@@ -64,6 +64,7 @@ from tensorflow.keras import Sequential, layers
 from tensorflow.keras.layers import Conv2D, Flatten, Dense, MaxPooling2D, Dropout, Activation, LSTM
 from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping, TensorBoard, ModelCheckpoint
 from tensorflow.keras.utils import to_categorical
+from tensorflow.python.framework.graph_util import convert_variables_to_constants
 
 # Testing
 from pytest_pipeline import PipelineRun, mark, utils
