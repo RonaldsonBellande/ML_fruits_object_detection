@@ -60,7 +60,7 @@ class MultiHeadAttentionLSA(layers.MultiHeadAttention, model_utilities):
         super().__init__(**kwargs)
         model_utilities.__init__(self)
 
-        self.tau = tf.cast(tf.Variable(math.sqrt(float(self._key_dim)), trainable=True), tf.float16)
+        self.tau = tf.cast(tf.Variable((math.sqrt((self._key_dim))), trainable=True), tf.float16)
 
     def _compute_attention(self, query, key, value, attention_mask=None, training=None):
         query = tf.multiply(query, 1 / self.tau)

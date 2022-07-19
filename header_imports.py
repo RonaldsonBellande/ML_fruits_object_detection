@@ -67,6 +67,7 @@ from tensorflow.keras.utils import to_categorical
 from tensorflow.python.framework.graph_util import convert_variables_to_constants
 
 tf1.compat.v1.disable_eager_execution()
+
 # Testing
 from pytest_pipeline import PipelineRun, mark, utils
 

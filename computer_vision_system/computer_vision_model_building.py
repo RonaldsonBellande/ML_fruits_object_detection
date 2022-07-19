@@ -59,7 +59,7 @@ class model_building(models, computer_vision_utilities, model_utilities, freesin
 
     def h5_to_pb(self):
         output_names = [out.op.name for out in self.model.outputs]
-
+        
         frozen_graph = self.freeze(output_names)
         tf1.train.write_graph(frozen_graph, self.model_pb , self.model_type + "_architecture_pd_" + str(self.number_classes) +".pd", as_text=False)
 
