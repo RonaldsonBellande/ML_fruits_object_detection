@@ -1,4 +1,4 @@
-#include <>
+#include "training.h"
 
 int ModelCreate(model_t *model, const char *graph_def_filename) {
   model->status = TF_NewStatus();
@@ -67,6 +67,7 @@ int ModelInit(model_t *model) {
                 NULL, model->status);
   return Okay(model->status);
 }
+
 int ModelCheckpoint(model_t *model, const char *checkpoint_prefix, int type) {
   TF_Tensor *t = ScalarStringTensor(checkpoint_prefix, model->status);
   if (!Okay(model->status)) {
