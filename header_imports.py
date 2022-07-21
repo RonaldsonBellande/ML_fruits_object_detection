@@ -1,28 +1,23 @@
 # Copyright © 2021 Ronaldson Bellande
 from __future__ import print_function
 import cv2, sys, math, random, warnings, os, os.path, json, pydicom, glob, shutil, datetime, zipfile, urllib.request, tensorflow as tf, tensorflow.compat.v1 as tf1, time, trimesh, librosa, gym
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
+import numpy as np, pandas as pd, matplotlib.pyplot as plt, matplotlib.image as img, image_slicer, nvidia_smi
 from glob import glob
 from os.path import basename
 from PIL import Image, ImageDraw
 from imgaug import augmenters as iaa
 from tqdm import tqdm
 from random import randint
-import image_slicer
 from numpy import expand_dims
 from contextlib import redirect_stdout
 from gym import error, spaces, utils
 from multiprocessing import Pool
 
-import nvidia_smi
 from os import listdir
 from xml.etree import ElementTree
 from matplotlib import pyplot
 from matplotlib.patches import Rectangle
 from mpl_toolkits.mplot3d import Axes3D
-import matplotlib.image as img
 from collections import deque
 
 from sklearn.tree import DecisionTreeRegressor

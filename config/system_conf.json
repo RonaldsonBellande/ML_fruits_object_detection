@@ -1,16 +1,17 @@
 {
   "dataset": {
-    "dataset_1_model1": "model1_computer_vision_categories_2_model.h5",
-    "dataset_1_model2": "model2_computer_vision_categories_2_model.h5",
-    "dataset_1_model3": "model3_computer_vision_categories_2_model.h5",
-    "dataset_2_model1": "model1_computer_vision_categories_2_model.h5",
-    "dataset_2_model2": "model2_computer_vision_categories_2_model.h5",
-    "dataset_2_model3": "model3_computer_vision_categories_2_model.h5",
     "dataset_path": "fruits_360_datasets/Training_Small/",
     "valid_images": [
       ".json",
       ".png"
     ]
+  },
+  "model_architecture": {
+    "dataset_1_model1": "model1_architecture_4.h5",
+    "dataset_1_model2": "personal_model_architecture_4.h5",
+    "dataset_1_model3": "unet_model_architecture_4.h5",
+    "dataset_2_model1": "vit_transformer_shift_model_architecture_4.h5",
+    "dataset_2_model2": "vit_transformer_shift_noise_model_architecture_4.h5",
   },
   "model": {
     "batch_size": [
