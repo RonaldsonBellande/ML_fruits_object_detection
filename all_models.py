@@ -17,6 +17,7 @@ class models(object):
 
         return model
 
+
     # UNET model
     def unet_model(self):
         inputs = keras.Input(shape=self.input_shape)
@@ -170,6 +171,7 @@ class models(object):
         return x
 
 
+
     # CNN with LSTM models
     def cnn_lstm_model(self):
 
@@ -314,7 +316,6 @@ class models(object):
 
 
 
-
     # Personal model for video
     def personal_model_2(self):
 
@@ -424,4 +425,3 @@ class models(object):
         model.compile(loss=keras.losses.binary_crossentropy, optimizer=self.optimizer)
 
         return model
-

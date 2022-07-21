@@ -1,0 +1,17 @@
+# Recomandation for library for cuda settings 
+
+ca-certificates
+cuda-command-line-tools-11-2
+libcublas-11-2
+libcublas-dev-11-2
+libcufft-11-2
+libcurand-11-2
+libcusolver-11-2
+libcusparse-11-2
+libgomp1
+build-essential
+curl
+libfreetype6-dev
+pkg-config
+software-properties-common
+unzip
