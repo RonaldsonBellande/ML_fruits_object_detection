@@ -6,12 +6,19 @@
       ".png"
     ]
   },
-  "model_architecture": {
+  "model_architecture_h5": {
     "dataset_1_model1": "model1_architecture_4.h5",
     "dataset_1_model2": "personal_model_architecture_4.h5",
     "dataset_1_model3": "unet_model_architecture_4.h5",
     "dataset_2_model1": "vit_transformer_shift_model_architecture_4.h5",
     "dataset_2_model2": "vit_transformer_shift_noise_model_architecture_4.h5",
+  },
+  "model_architecture_pd": {
+    "dataset_1_model1": "model1_architecture_4.pd",
+    "dataset_1_model2": "personal_model_architecture_4.pd",
+    "dataset_1_model3": "unet_model_architecture_4.pd",
+    "dataset_2_model1": "vit_transformer_shift_model_architecture_4.pd",
+    "dataset_2_model2": "vit_transformer_shift_noise_model_architecture_4.pd",
   },
   "model": {
     "batch_size": [
