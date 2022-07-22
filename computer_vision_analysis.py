@@ -7,15 +7,15 @@ def main():
     if len(sys.argv) != 1:
 
         if sys.argv[2] == "model1":
-            input_model = system_config["dataset"]["dataset_1_model1"]
+            input_model = system_config["dataset"]["dataset_path"]
         elif sys.argv[2] == "vit_transformer_shift_model":
-            input_model = system_config["dataset"]["dataset_1_model1"]
+            input_model = system_config["dataset"]["dataset_path"]
         elif sys.argv[2] == "vit_transformer_shift_noise_model":
-            input_model = system_config["dataset"]["dataset_1_model1"]
+            input_model = system_config["dataset"]["dataset_path"]
         elif sys.argv[2] == "unet_model":
-            input_model = system_config["dataset"]["dataset_1_model1"]
+            input_model = system_config["dataset"]["dataset_path"]
         elif sys.argv[2] == "personal_model":
-            input_model = system_config["dataset"]["dataset_1_model1"]
+            input_model = system_config["dataset"]["dataset_path"]
        
 
         if sys.argv[1] == "model_building":
