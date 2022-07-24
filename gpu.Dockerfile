@@ -1,4 +1,4 @@
-ARARG ML_ARCHITECTURE_VERSION=latest
+ARG ML_ARCHITECTURE_VERSION=latest
 
 FROM ubuntu:20.04 as base_build
 FROM nvidia/cuda:11.2.1-base-ubuntu20.04
@@ -26,7 +26,8 @@ WORKDIR ./
 COPY requirements.txt .
 
 # Install dependencies for system
-RUN apt-get update && apt-get install -y --no-install-recommends -r system_requirements.txt \
+RUN apt-get update && apt-get install -y --no-install-recommends <system_requirements.txt && \
+  apt-get upgrade -y && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 
@@ -38,10 +39,6 @@ RUN add-apt-repository ppa:deadsnakes/ppa && \
 
 # Pip install 
 RUN pip3 install --upgrade pip
-
-RUN curl -fSsL -O https://bootstrap.pypa.io/get-pip.py && \
-  python3 get-pip.py && \
-  rm get-pip.py
 
 # Install python libraries
 RUN pip --no-cache-dir install -r requirements.txt

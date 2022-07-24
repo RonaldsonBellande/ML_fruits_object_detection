@@ -1,12 +1,13 @@
 # Recomandation for library for linux system
 
-python3
+software-properties-common
+python3.8
 neovim
 apt-utils
 automake
 build-essential
 ca-certificates
-curl
+pycurl
 git
 python3-pip
 libcurl3-dev

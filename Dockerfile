@@ -1,4 +1,6 @@
 FROM ubuntu:20.04 as base_build
+SHELL [ "/bin/bash" , "-c" ]
+
 ENV DEBIAN_FRONTEND noninteractive
 ENV PYTHON_VERSION="3.8"
 
@@ -16,24 +18,21 @@ RUN apt-get upgrade -y
 # RUN workspace and sourcing
 WORKDIR ./
 COPY requirements.txt .
+COPY system_requirements.txt .
 
 # Install dependencies for system
-RUN apt-get update && apt-get install -y --no-install-recommends -r system_requirements.txt \
+RUN apt-get update && apt-get install -y --no-install-recommends <system_requirements.txt && \
+  apt-get upgrade -y && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 
 # Install python 3.8 and make primary 
-RUN add-apt-repository ppa:deadsnakes/ppa && \
-  apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y \
   python3.8 python3.8-dev python3-pip python3.8-venv && \
   update-alternatives --install /usr/bin/python python /usr/bin/python3.8 1
 
-# pip install update 
+# Pip install update 
 RUN pip3 install --upgrade pip
-
-RUN curl -fSsL -O https://bootstrap.pypa.io/get-pip.py && \
-  python3 get-pip.py && \
-  rm get-pip.py
 
 # Install python libraries
 RUN pip --no-cache-dir install -r requirements.txt
